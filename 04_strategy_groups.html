@@ -39,7 +39,40 @@
   .jc-nav a { color: rgba(232,227,217,0.65); text-decoration: none; transition: color 0.1s; }
   .jc-nav a:hover { color: #e8e3d9; }
   .jc-nav-brand { color: #c4956a !important; font-weight: 600; }
-  .jc-nav-links { display: flex; gap: 1.4rem; margin-left: auto; }
+  .jc-nav-dropdown { position: relative; margin-left: auto; display: flex; align-items: center; }
+  .jc-dropdown-btn {
+    background: none; border: 1px solid rgba(232,227,217,0.25); cursor: pointer;
+    color: rgba(232,227,217,0.65); font-family: 'IBM Plex Mono', monospace;
+    font-size: 7.8pt; letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 0.25rem 0.75rem; transition: color 0.1s, border-color 0.1s;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .jc-dropdown-btn:hover { color: #e8e3d9; border-color: rgba(232,227,217,0.5); }
+  .jc-dropdown-menu {
+    display: none; position: absolute; right: 0; top: calc(100% + 6px);
+    background: #1a1814; border: 1px solid rgba(232,227,217,0.18);
+    min-width: 275px; z-index: 200;
+  }
+  .jc-dropdown-menu.open { display: block; }
+  .jc-dropdown-item {
+    display: flex; align-items: center; gap: 0.75rem;
+    padding: 0.5rem 1rem; text-decoration: none;
+    color: rgba(232,227,217,0.65);
+    font-family: 'IBM Plex Mono', monospace; font-size: 7.4pt;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    border-bottom: 1px solid rgba(232,227,217,0.07);
+    transition: background 0.1s, color 0.1s;
+  }
+  .jc-dropdown-item:last-child { border-bottom: none; }
+  .jc-dropdown-item:hover { background: rgba(232,227,217,0.07); color: #e8e3d9; }
+  .jc-dropdown-item.jc-active { color: #c4956a; }
+  .jc-step-n {
+    width: 17px; height: 17px; border-radius: 50%;
+    border: 1.5px solid rgba(232,227,217,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 6.5pt; flex-shrink: 0;
+  }
+  .jc-dropdown-item.jc-active .jc-step-n { border-color: #c4956a; color: #c4956a; }
   .jc-nav-print {
     background: none; border: 1px solid rgba(232,227,217,0.25); cursor: pointer;
     color: rgba(232,227,217,0.65); padding: 0.2rem 0.7rem;
@@ -243,6 +276,12 @@
     font-size: 7.6pt; letter-spacing: 0.04em;
     color: var(--ink-soft); margin-top: 0.04in;
   }
+  .event-source a {
+    color: var(--ink-soft); text-decoration: underline;
+    text-underline-offset: 2px; transition: color 0.1s;
+  }
+  .event-source a:hover { color: var(--ink); }
+  @media print { .event-source a { color: var(--ink-soft); text-decoration: none; } }
 
   footer {
     margin-top: auto; padding-top: 0.18in;
@@ -260,9 +299,18 @@
 <!-- Nav -->
 <nav class="jc-nav">
   <a href="index.html" class="jc-nav-brand">Jim Crow in America</a>
-  <div class="jc-nav-links">
-    <a href="02_mechanisms_reference.html">Mechanisms</a>
-    <a href="05_yarn_cards.html">Connection Cards</a>
+  <div class="jc-nav-dropdown">
+    <button class="jc-dropdown-btn" id="jcDropBtn">All Pages ▾</button>
+    <div class="jc-dropdown-menu" id="jcDropMenu">
+    <a href="00_image_analysis_card.html" class="jc-dropdown-item"><span class="jc-step-n">1</span> Image Analysis Card</a>
+    <a href="01_context_cards.html" class="jc-dropdown-item"><span class="jc-step-n">2</span> Image Context Cards</a>
+    <a href="02_mechanisms_reference.html" class="jc-dropdown-item"><span class="jc-step-n">3</span> Mechanisms of Jim Crow</a>
+    <a href="03_strategies_notetaking.html" class="jc-dropdown-item"><span class="jc-step-n">4</span> Strategies Note-Taking</a>
+    <a href="04_strategy_groups.html" class="jc-dropdown-item jc-active"><span class="jc-step-n">5</span> Strategy Group Handouts</a>
+    <a href="05_yarn_cards.html" class="jc-dropdown-item"><span class="jc-step-n">6</span> Yarn Connection Cards</a>
+    <a href="06_reflection.html" class="jc-dropdown-item"><span class="jc-step-n">7</span> Reflection</a>
+    <a href="07_exit_ticket.html" class="jc-dropdown-item"><span class="jc-step-n">8</span> Exit Ticket</a>
+    </div>
   </div>
   <button class="jc-nav-print" onclick="window.print()">Print All</button>
 </nav>
@@ -305,7 +353,7 @@
       <div>
         <div class="event-name">NAACP founded</div>
         <div class="event-desc">A coalition of Black activists (W.E.B. Du Bois, Ida B. Wells) and white reformers founds the NAACP in response to the 1908 Springfield, IL race riot. Its Legal Defense Fund will spend the next four decades building the case law that brings down Plessy.</div>
-        <div class="event-source">naacpldf.org/about-us/history</div>
+        <div class="event-source"><a href="https://naacpldf.org/about-us/history" target="_blank" rel="noopener">naacpldf.org/about-us/history</a></div>
       </div>
     </div>
     <div class="event">
@@ -313,7 +361,7 @@
       <div>
         <div class="event-name">Shelley v. Kraemer</div>
         <div class="event-desc">Supreme Court rules that racially restrictive covenants in property deeds cannot be enforced by courts. The deeds remain on the books; what changes is that no court will enforce them. NAACP victory argued by Thurgood Marshall.</div>
-        <div class="event-source">oyez.org/cases/1940-1955/334us1</div>
+        <div class="event-source"><a href="https://oyez.org/cases/1940-1955/334us1" target="_blank" rel="noopener">oyez.org/cases/1940-1955/334us1</a></div>
       </div>
     </div>
     <div class="event">
@@ -321,7 +369,7 @@
       <div>
         <div class="event-name">Brown v. Board of Education</div>
         <div class="event-desc">Supreme Court overturns Plessy v. Ferguson, ruling segregated schools "inherently unequal." Five consolidated cases, including Briggs v. Elliott from Clarendon County, SC. Decision is unanimous.</div>
-        <div class="event-source">oyez.org/cases/1940-1955/347us483</div>
+        <div class="event-source"><a href="https://oyez.org/cases/1940-1955/347us483" target="_blank" rel="noopener">oyez.org/cases/1940-1955/347us483</a></div>
       </div>
     </div>
     <div class="event">
@@ -329,7 +377,7 @@
       <div>
         <div class="event-name">Little Rock Nine</div>
         <div class="event-desc">Nine Black students integrate Central High School in Little Rock, AR, three years after Brown. Governor Faubus calls out the Arkansas National Guard to block them; Eisenhower federalizes the Guard and sends the 101st Airborne to escort the students to class.</div>
-        <div class="event-source">nps.gov/chsc</div>
+        <div class="event-source"><a href="https://nps.gov/chsc" target="_blank" rel="noopener">nps.gov/chsc</a></div>
       </div>
     </div>
     <div class="event">
@@ -337,7 +385,7 @@
       <div>
         <div class="event-name">Civil Rights Act</div>
         <div class="event-desc">Bans discrimination in public accommodations, employment, and federally funded programs. Signed by LBJ on July 2, 1964. The legal architecture of Jim Crow — the signs, the separate facilities, the legal segregation — becomes federally illegal.</div>
-        <div class="event-source">archives.gov/milestone-documents/civil-rights-act</div>
+        <div class="event-source"><a href="https://archives.gov/milestone-documents/civil-rights-act" target="_blank" rel="noopener">archives.gov/milestone-documents/civil-rights-act</a></div>
       </div>
     </div>
   </div>
@@ -375,7 +423,7 @@
       <div>
         <div class="event-name">"Don't Buy Where You Can't Work" campaigns</div>
         <div class="event-desc">Black communities in cities across the North and South boycott white-owned businesses that refused to hire Black workers. The campaigns built the organizing networks that Montgomery and others would later draw on.</div>
-        <div class="event-source">blackpast.org · Don't Buy Where You Can't Work</div>
+        <div class="event-source"><a href="https://blackpast.org" target="_blank" rel="noopener">blackpast.org</a> · Don't Buy Where You Can't Work</div>
       </div>
     </div>
     <div class="event">
@@ -383,7 +431,7 @@
       <div>
         <div class="event-name">Montgomery Bus Boycott</div>
         <div class="event-desc">After Rosa Parks's arrest on December 1, 1955, the Women's Political Council (Jo Ann Robinson) and the Montgomery Improvement Association organize a 381-day boycott of city buses. Black ridership was 75% of the system's revenue.</div>
-        <div class="event-source">kinginstitute.stanford.edu/montgomery-bus-boycott</div>
+        <div class="event-source"><a href="https://kinginstitute.stanford.edu/montgomery-bus-boycott" target="_blank" rel="noopener">kinginstitute.stanford.edu/montgomery-bus-boycott</a></div>
       </div>
     </div>
     <div class="event">
@@ -391,7 +439,7 @@
       <div>
         <div class="event-name">Tallahassee Bus Boycott</div>
         <div class="event-desc">Sparked by the arrest of Wilhelmina Jakes and Carrie Patterson, two FAMU students who refused to give up their seats on a Tallahassee bus. The boycott lasted seven months.</div>
-        <div class="event-source">floridamemory.com (search "Tallahassee bus boycott")</div>
+        <div class="event-source"><a href="https://floridamemory.com" target="_blank" rel="noopener">floridamemory.com</a> (search "Tallahassee bus boycott")</div>
       </div>
     </div>
     <div class="event">
@@ -399,7 +447,7 @@
       <div>
         <div class="event-name">Albany Movement boycotts</div>
         <div class="event-desc">In Albany, GA, Black residents boycott segregated buses, white-owned downtown businesses, and segregated facilities. The city closed parks rather than integrate them — but it taught the SCLC lessons that shaped Birmingham.</div>
-        <div class="event-source">snccdigital.org · Albany Movement</div>
+        <div class="event-source"><a href="https://snccdigital.org" target="_blank" rel="noopener">snccdigital.org</a> · Albany Movement</div>
       </div>
     </div>
     <div class="event">
@@ -407,7 +455,7 @@
       <div>
         <div class="event-name">Memphis Sanitation Workers Strike</div>
         <div class="event-desc">After two Black sanitation workers were crushed to death in a malfunctioning truck, 1,300 Memphis sanitation workers go on strike. "I AM A MAN" placards. Dr. King traveled to support the strike and was assassinated there on April 4, 1968.</div>
-        <div class="event-source">aflcio.org · Memphis Sanitation Strike</div>
+        <div class="event-source"><a href="https://aflcio.org" target="_blank" rel="noopener">aflcio.org</a> · Memphis Sanitation Strike</div>
       </div>
     </div>
   </div>
@@ -445,7 +493,7 @@
       <div>
         <div class="event-name">Greensboro sit-ins</div>
         <div class="event-desc">Four students from North Carolina A&T sit at the Woolworth's lunch counter in downtown Greensboro and refuse to leave. By the end of the week, hundreds of students join. Within two months, sit-ins spread to 55 cities in 13 states.</div>
-        <div class="event-source">sitinmovement.org</div>
+        <div class="event-source"><a href="https://sitinmovement.org" target="_blank" rel="noopener">sitinmovement.org</a></div>
       </div>
     </div>
     <div class="event">
@@ -453,7 +501,7 @@
       <div>
         <div class="event-name">Freedom Rides</div>
         <div class="event-desc">Black and white CORE activists ride interstate buses through the South to test the Supreme Court's ruling against segregation in interstate travel. Riders are beaten in Anniston, AL (their bus is firebombed), Birmingham, and Montgomery.</div>
-        <div class="event-source">nps.gov/articles/the-freedom-riders.htm</div>
+        <div class="event-source"><a href="https://nps.gov/articles/the-freedom-riders.htm" target="_blank" rel="noopener">nps.gov/articles/the-freedom-riders.htm</a></div>
       </div>
     </div>
     <div class="event">
@@ -461,7 +509,7 @@
       <div>
         <div class="event-name">Birmingham Campaign</div>
         <div class="event-desc">SCLC and Birmingham activists target what King called "the most segregated city in America." Police Commissioner Bull Connor turns fire hoses and police dogs on schoolchildren. The images go national. Within months, Birmingham desegregates downtown facilities.</div>
-        <div class="event-source">kinginstitute.stanford.edu/birmingham-campaign</div>
+        <div class="event-source"><a href="https://kinginstitute.stanford.edu/birmingham-campaign" target="_blank" rel="noopener">kinginstitute.stanford.edu/birmingham-campaign</a></div>
       </div>
     </div>
     <div class="event">
@@ -469,7 +517,7 @@
       <div>
         <div class="event-name">March on Washington</div>
         <div class="event-desc">250,000 marchers gather at the Lincoln Memorial. King delivers the "I Have a Dream" speech. The march helps build pressure for the Civil Rights Act of 1964. Organized largely by Bayard Rustin, A. Philip Randolph, and the labor movement.</div>
-        <div class="event-source">archives.gov · March on Washington</div>
+        <div class="event-source"><a href="https://archives.gov" target="_blank" rel="noopener">archives.gov</a> · March on Washington</div>
       </div>
     </div>
     <div class="event">
@@ -477,7 +525,7 @@
       <div>
         <div class="event-name">Selma to Montgomery marches</div>
         <div class="event-desc">Three attempted marches from Selma to the Alabama state capital. The first, on March 7, is broken up by state troopers on the Edmund Pettus Bridge ("Bloody Sunday"). The third, completed under federal protection, helps secure passage of the Voting Rights Act five months later.</div>
-        <div class="event-source">nps.gov/semo</div>
+        <div class="event-source"><a href="https://nps.gov/semo" target="_blank" rel="noopener">nps.gov/semo</a></div>
       </div>
     </div>
   </div>
@@ -515,7 +563,7 @@
       <div>
         <div class="event-name">Council of Federated Organizations (COFO)</div>
         <div class="event-desc">SNCC, CORE, NAACP, and SCLC form a coalition to coordinate voter registration in Mississippi, where Black voter registration was below 7%. Registrars use literacy tests, poll taxes, and economic retaliation; activists are threatened, beaten, killed.</div>
-        <div class="event-source">snccdigital.org · Mississippi</div>
+        <div class="event-source"><a href="https://snccdigital.org" target="_blank" rel="noopener">snccdigital.org</a> · Mississippi</div>
       </div>
     </div>
     <div class="event">
@@ -541,7 +589,7 @@
             <tr><td style="padding: 0.025in 0.08in 0.025in 0;">Rabbi Arthur J. Lelyveld</td><td style="padding: 0.025in 0.08in;">Cleveland, OH</td><td style="padding: 0.025in 0.08in;">Fairmount Temple (Clergy)</td><td style="padding: 0.025in 0 0.025in 0.08in;">Hattiesburg</td></tr>
           </tbody>
         </table>
-        <div class="event-source">snccdigital.org · Freedom Summer</div>
+        <div class="event-source"><a href="https://snccdigital.org" target="_blank" rel="noopener">snccdigital.org</a> · Freedom Summer</div>
       </div>
     </div>
     <div class="event">
@@ -549,7 +597,7 @@
       <div>
         <div class="event-name">Fannie Lou Hamer at the DNC</div>
         <div class="event-desc">The Mississippi Freedom Democratic Party challenges the all-white official MS delegation at the Democratic Convention in Atlantic City. Hamer's televised testimony — describing the beating she received for trying to register — is so powerful that LBJ calls a press conference to keep her off the air.</div>
-        <div class="event-source">americanradioworks.publicradio.org · Hamer</div>
+        <div class="event-source"><a href="https://americanradioworks.publicradio.org" target="_blank" rel="noopener">americanradioworks.publicradio.org</a> · Hamer</div>
       </div>
     </div>
     <div class="event">
@@ -557,7 +605,7 @@
       <div>
         <div class="event-name">Lowndes County Freedom Organization</div>
         <div class="event-desc">In a county that was 80% Black with zero registered Black voters, SNCC's Stokely Carmichael helps organize an independent Black political party. The party's symbol — a black panther — is later adopted by the Black Panther Party for Self-Defense.</div>
-        <div class="event-source">snccdigital.org · LCFO</div>
+        <div class="event-source"><a href="https://snccdigital.org" target="_blank" rel="noopener">snccdigital.org</a> · LCFO</div>
       </div>
     </div>
     <div class="event">
@@ -565,7 +613,7 @@
       <div>
         <div class="event-name">Voting Rights Act</div>
         <div class="event-desc">Federal legislation banning literacy tests and authorizing federal oversight of voter registration in covered jurisdictions. Black voter registration in Mississippi rises from 7% in 1964 to 60% by 1968.</div>
-        <div class="event-source">archives.gov · Voting Rights Act</div>
+        <div class="event-source"><a href="https://archives.gov" target="_blank" rel="noopener">archives.gov</a> · Voting Rights Act</div>
       </div>
     </div>
   </div>
@@ -603,7 +651,7 @@
       <div>
         <div class="event-name">Highlander Folk School founded</div>
         <div class="event-desc">Myles Horton founds Highlander in rural Tennessee as an integrated training center for labor organizers and, later, civil rights activists. Rosa Parks attended a workshop there four months before her arrest in Montgomery.</div>
-        <div class="event-source">highlandercenter.org</div>
+        <div class="event-source"><a href="https://highlandercenter.org" target="_blank" rel="noopener">highlandercenter.org</a></div>
       </div>
     </div>
     <div class="event">
@@ -611,7 +659,7 @@
       <div>
         <div class="event-name">Citizenship Schools (Septima Clark)</div>
         <div class="event-desc">Clark develops a model for teaching Black adults in the South to read and to pass voter literacy tests. By 1969, an estimated 700,000 Black voters had been registered through Citizenship School graduates.</div>
-        <div class="event-source">avery.cofc.edu · Septima Clark</div>
+        <div class="event-source"><a href="https://avery.cofc.edu" target="_blank" rel="noopener">avery.cofc.edu</a> · Septima Clark</div>
       </div>
     </div>
     <div class="event">
@@ -619,7 +667,7 @@
       <div>
         <div class="event-name">SCLC founded</div>
         <div class="event-desc">After the Montgomery Bus Boycott, ministers from across the South form the Southern Christian Leadership Conference. King is its first president. SCLC becomes one of the movement's main organizing bodies.</div>
-        <div class="event-source">kinginstitute.stanford.edu · SCLC</div>
+        <div class="event-source"><a href="https://kinginstitute.stanford.edu" target="_blank" rel="noopener">kinginstitute.stanford.edu</a> · SCLC</div>
       </div>
     </div>
     <div class="event">
@@ -627,7 +675,7 @@
       <div>
         <div class="event-name">SNCC founded (Ella Baker)</div>
         <div class="event-desc">After the Greensboro sit-ins, Ella Baker convenes student activists at Shaw University in Raleigh. SNCC is founded as a Black-youth-led organization. Baker insists on bottom-up democratic organizing rather than charismatic leadership.</div>
-        <div class="event-source">snccdigital.org · Ella Baker</div>
+        <div class="event-source"><a href="https://snccdigital.org" target="_blank" rel="noopener">snccdigital.org</a> · Ella Baker</div>
       </div>
     </div>
     <div class="event">
@@ -635,7 +683,7 @@
       <div>
         <div class="event-name">Freedom Schools</div>
         <div class="event-desc">During Freedom Summer, COFO operates 41 Freedom Schools across Mississippi serving 2,500 students. The curriculum included Black history, current events, and political organizing. Several former students went on to organize in their own communities.</div>
-        <div class="event-source">snccdigital.org · Freedom Schools</div>
+        <div class="event-source"><a href="https://snccdigital.org" target="_blank" rel="noopener">snccdigital.org</a> · Freedom Schools</div>
       </div>
     </div>
   </div>
@@ -673,7 +721,7 @@
       <div>
         <div class="event-name">Robert F. Williams &amp; the Monroe NAACP</div>
         <div class="event-desc">Williams, president of the Monroe, NC NAACP chapter, organizes Black veterans into an armed defense unit after repeated Klan attacks. When the Klan motorcades through the Black neighborhood in 1957, the unit returns fire. Klan night-riding in Monroe ends.</div>
-        <div class="event-source">historyisaweapon.com · Negroes With Guns</div>
+        <div class="event-source"><a href="https://historyisaweapon.com" target="_blank" rel="noopener">historyisaweapon.com</a> · Negroes With Guns</div>
       </div>
     </div>
     <div class="event">
@@ -681,7 +729,7 @@
       <div>
         <div class="event-name">Negroes with Guns published</div>
         <div class="event-desc">Williams publishes a book arguing that armed self-defense is compatible with — and sometimes necessary for — nonviolent civil rights organizing. The book influences a generation of activists, including Huey Newton and Bobby Seale.</div>
-        <div class="event-source">historyisaweapon.com · Negroes With Guns</div>
+        <div class="event-source"><a href="https://historyisaweapon.com" target="_blank" rel="noopener">historyisaweapon.com</a> · Negroes With Guns</div>
       </div>
     </div>
     <div class="event">
@@ -689,7 +737,7 @@
       <div>
         <div class="event-name">Deacons for Defense and Justice founded</div>
         <div class="event-desc">In Jonesboro, LA, Black men — many of them WWII and Korea veterans — organize an armed group to protect CORE workers, civil rights marches, and Black neighborhoods from Klan violence. Chapters spread across Louisiana and Mississippi.</div>
-        <div class="event-source">snccdigital.org · Deacons for Defense</div>
+        <div class="event-source"><a href="https://snccdigital.org" target="_blank" rel="noopener">snccdigital.org</a> · Deacons for Defense</div>
       </div>
     </div>
     <div class="event">
@@ -697,7 +745,7 @@
       <div>
         <div class="event-name">Bogalusa, Louisiana</div>
         <div class="event-desc">The Bogalusa Deacons protect CORE workers during a sustained civil rights campaign in a town where the Klan operated openly. After several armed standoffs, federal marshals are deployed. Bogalusa becomes one of the first major Southern victories under the new Civil Rights Act.</div>
-        <div class="event-source">snccdigital.org · Bogalusa</div>
+        <div class="event-source"><a href="https://snccdigital.org" target="_blank" rel="noopener">snccdigital.org</a> · Bogalusa</div>
       </div>
     </div>
     <div class="event">
@@ -730,6 +778,15 @@ if (hash) {
   const tab = [...document.querySelectorAll('.group-tab')].find(t => t.getAttribute('onclick').includes("'" + hash + "'"));
   if (sheet && tab) showGroup(hash, tab);
 }
+</script>
+<script>
+(function(){
+  var btn = document.getElementById('jcDropBtn');
+  var menu = document.getElementById('jcDropMenu');
+  if (!btn) return;
+  btn.addEventListener('click', function(e){ e.stopPropagation(); menu.classList.toggle('open'); });
+  document.addEventListener('click', function(){ menu.classList.remove('open'); });
+})();
 </script>
 </body>
 </html>

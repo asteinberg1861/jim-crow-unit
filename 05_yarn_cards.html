@@ -34,7 +34,40 @@
   .jc-nav a { color: rgba(232,227,217,0.65); text-decoration: none; transition: color 0.1s; }
   .jc-nav a:hover { color: #e8e3d9; }
   .jc-nav-brand { color: #c4956a !important; font-weight: 600; }
-  .jc-nav-links { display: flex; gap: 1.4rem; margin-left: auto; }
+  .jc-nav-dropdown { position: relative; margin-left: auto; display: flex; align-items: center; }
+  .jc-dropdown-btn {
+    background: none; border: 1px solid rgba(232,227,217,0.25); cursor: pointer;
+    color: rgba(232,227,217,0.65); font-family: 'IBM Plex Mono', monospace;
+    font-size: 7.8pt; letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 0.25rem 0.75rem; transition: color 0.1s, border-color 0.1s;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .jc-dropdown-btn:hover { color: #e8e3d9; border-color: rgba(232,227,217,0.5); }
+  .jc-dropdown-menu {
+    display: none; position: absolute; right: 0; top: calc(100% + 6px);
+    background: #1a1814; border: 1px solid rgba(232,227,217,0.18);
+    min-width: 275px; z-index: 200;
+  }
+  .jc-dropdown-menu.open { display: block; }
+  .jc-dropdown-item {
+    display: flex; align-items: center; gap: 0.75rem;
+    padding: 0.5rem 1rem; text-decoration: none;
+    color: rgba(232,227,217,0.65);
+    font-family: 'IBM Plex Mono', monospace; font-size: 7.4pt;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    border-bottom: 1px solid rgba(232,227,217,0.07);
+    transition: background 0.1s, color 0.1s;
+  }
+  .jc-dropdown-item:last-child { border-bottom: none; }
+  .jc-dropdown-item:hover { background: rgba(232,227,217,0.07); color: #e8e3d9; }
+  .jc-dropdown-item.jc-active { color: #c4956a; }
+  .jc-step-n {
+    width: 17px; height: 17px; border-radius: 50%;
+    border: 1.5px solid rgba(232,227,217,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 6.5pt; flex-shrink: 0;
+  }
+  .jc-dropdown-item.jc-active .jc-step-n { border-color: #c4956a; color: #c4956a; }
   .jc-nav-print {
     background: none; border: 1px solid rgba(232,227,217,0.25); cursor: pointer;
     color: rgba(232,227,217,0.65); padding: 0.2rem 0.7rem;
@@ -191,9 +224,18 @@
 <!-- Nav -->
 <nav class="jc-nav">
   <a href="index.html" class="jc-nav-brand">Jim Crow in America</a>
-  <div class="jc-nav-links">
-    <a href="04_strategy_groups.html">Strategy Groups</a>
-    <a href="06_reflection.html">Reflection</a>
+  <div class="jc-nav-dropdown">
+    <button class="jc-dropdown-btn" id="jcDropBtn">All Pages ▾</button>
+    <div class="jc-dropdown-menu" id="jcDropMenu">
+    <a href="00_image_analysis_card.html" class="jc-dropdown-item"><span class="jc-step-n">1</span> Image Analysis Card</a>
+    <a href="01_context_cards.html" class="jc-dropdown-item"><span class="jc-step-n">2</span> Image Context Cards</a>
+    <a href="02_mechanisms_reference.html" class="jc-dropdown-item"><span class="jc-step-n">3</span> Mechanisms of Jim Crow</a>
+    <a href="03_strategies_notetaking.html" class="jc-dropdown-item"><span class="jc-step-n">4</span> Strategies Note-Taking</a>
+    <a href="04_strategy_groups.html" class="jc-dropdown-item"><span class="jc-step-n">5</span> Strategy Group Handouts</a>
+    <a href="05_yarn_cards.html" class="jc-dropdown-item jc-active"><span class="jc-step-n">6</span> Yarn Connection Cards</a>
+    <a href="06_reflection.html" class="jc-dropdown-item"><span class="jc-step-n">7</span> Reflection</a>
+    <a href="07_exit_ticket.html" class="jc-dropdown-item"><span class="jc-step-n">8</span> Exit Ticket</a>
+    </div>
   </div>
   <button class="jc-nav-print" onclick="window.print()">Print</button>
 </nav>
@@ -321,6 +363,15 @@ function save() {
 
 load();
 document.querySelectorAll('input, textarea').forEach(el => el.addEventListener('input', save));
+</script>
+<script>
+(function(){
+  var btn = document.getElementById('jcDropBtn');
+  var menu = document.getElementById('jcDropMenu');
+  if (!btn) return;
+  btn.addEventListener('click', function(e){ e.stopPropagation(); menu.classList.toggle('open'); });
+  document.addEventListener('click', function(){ menu.classList.remove('open'); });
+})();
 </script>
 </body>
 </html>
