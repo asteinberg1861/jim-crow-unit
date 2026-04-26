@@ -399,13 +399,18 @@
         <div class="content">
           <div class="section-label">The mechanism</div>
           <div class="prompt-title">Which of these does this image show?</div>
-          <div class="prompt-sub">Check all that apply.</div>
+          <div class="prompt-sub">Check all that apply — then identify the primary mechanism below.</div>
           <div class="mechanisms">
-            <label class="mech"><input type="checkbox" id="mech-1"><div class="mech-label">Law / legal segregation</div></label>
+            <label class="mech"><input type="checkbox" id="mech-1"><div class="mech-label">Legal segregation</div></label>
             <label class="mech"><input type="checkbox" id="mech-2"><div class="mech-label">Economic control</div></label>
             <label class="mech"><input type="checkbox" id="mech-3"><div class="mech-label">Violence or the threat of violence</div></label>
             <label class="mech"><input type="checkbox" id="mech-4"><div class="mech-label">Spatial / architectural separation</div></label>
             <label class="mech"><input type="checkbox" id="mech-5"><div class="mech-label">Daily life under segregation</div></label>
+          </div>
+          <div class="prompt-sub" style="margin-top: 0.1in;">Which mechanism is primary? Defend your choice in 1–2 sentences.</div>
+          <div class="input-lines">
+            <input type="text" class="line-input" id="field-s3-1" placeholder=" " autocomplete="off">
+            <input type="text" class="line-input" id="field-s3-2" placeholder=" " autocomplete="off">
           </div>
         </div>
       </section>
@@ -435,7 +440,7 @@
 
 <script>
 const PAGE_KEY = 'jc-ia01';
-const FIELDS = ['name','s1-1','s1-2','location','date','source','s4-1','s4-2','s4-3','s4-4'];
+const FIELDS = ['name','s1-1','s1-2','location','date','source','s3-1','s3-2','s4-1','s4-2','s4-3','s4-4'];
 const CHECKS = ['mech-1','mech-2','mech-3','mech-4','mech-5'];
 
 function load() {

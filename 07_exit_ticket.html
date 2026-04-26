@@ -305,58 +305,22 @@
   </header>
 
   <div class="frame">
-    Some mechanisms of Jim Crow were dismantled. Some were altered and continue to operate. Name one mechanism that may still operate today, in altered form. Cite a specific, locatable instance — your county, your state, a documented case. The mechanism in your zip code is harder to see than the one in the news cycle. Press for that one.
+    Some mechanisms of Jim Crow were dismantled. Some were altered and continue to operate. Name one mechanism that may still operate today, in altered form. Respond using one of the two options below — your choice.
   </div>
 
   <div class="options-row">
     <div class="option">
       <div class="option-label">Option A</div>
-      <div class="option-title">Choose from the list</div>
-      <div class="option-text">Mechanisms historians and journalists have documented as still operating, in altered form:</div>
-      <div class="candidates">
-        <label class="candidate"><input type="radio" name="option" value="School district boundary lines"><span>School district boundary lines</span></label>
-        <label class="candidate"><input type="radio" name="option" value="Mortgage lending discrimination"><span>Mortgage lending discrimination</span></label>
-        <label class="candidate"><input type="radio" name="option" value="Restrictive covenants in property deeds"><span>Restrictive covenants in property deeds</span></label>
-        <label class="candidate"><input type="radio" name="option" value="Employment background-check practices"><span>Employment background-check practices</span></label>
-        <label class="candidate"><input type="radio" name="option" value="Cash bail systems"><span>Cash bail systems</span></label>
-        <label class="candidate"><input type="radio" name="option" value="Voter ID and registration access"><span>Voter ID and registration access</span></label>
-      </div>
+      <div class="option-title">How your thinking changed</div>
+      <div class="option-text">Explain how this activity changed your thinking about Jim Crow, segregation, and the Civil Rights movement.</div>
+      <textarea class="response-area" id="field-option-a" rows="6" placeholder=" " style="margin-top: 0.12in;"></textarea>
     </div>
 
     <div class="option">
       <div class="option-label">Option B</div>
-      <div class="option-title">Propose your own</div>
-      <div class="option-text">A mechanism not on this list. Same evidentiary requirement: specific, locatable, with evidence you can name.</div>
-      <div class="option-text" style="margin-top: 0.1in; font-style: italic; color: var(--ink-soft);">
-        Push past what is salient in the news cycle. Look for what has been made invisible — the mechanism in a deed, a district line, a hiring policy. The local is where this reaches you.
-      </div>
-      <div style="margin-top: 0.1in;">
-        <input type="text" class="field-input" id="field-own-mechanism" placeholder="Your mechanism…" style="width:100%;" autocomplete="off">
-      </div>
-    </div>
-  </div>
-
-  <div class="response-block">
-    <div class="response-label">Your response</div>
-
-    <div class="field">
-      <span class="field-label">Mechanism named</span>
-      <input type="text" class="field-input" id="field-mechanism" placeholder=" " autocomplete="off">
-    </div>
-
-    <div class="field">
-      <span class="field-label">Specific instance</span>
-      <input type="text" class="field-input" id="field-instance" placeholder=" " autocomplete="off">
-    </div>
-
-    <div class="field">
-      <span class="field-label">Where (location)</span>
-      <input type="text" class="field-input" id="field-location" placeholder=" " autocomplete="off">
-    </div>
-
-    <div style="margin-top: 0.14in;">
-      <div class="response-label" style="margin-bottom: 0.06in;">What evidence makes you confident this is operating?</div>
-      <textarea class="response-area" id="field-evidence" rows="4" placeholder=" "></textarea>
+      <div class="option-title">An image that stayed with you</div>
+      <div class="option-text">Pick an image — one you didn't pin to the board — that stuck out to you the most. Explain why it stuck with you.</div>
+      <textarea class="response-area" id="field-option-b" rows="6" placeholder=" " style="margin-top: 0.12in;"></textarea>
     </div>
   </div>
 
@@ -368,31 +332,25 @@
 
 <script>
 const PAGE_KEY = 'jc-et02';
-const TEXT_FIELDS = ['name', 'own-mechanism', 'mechanism', 'instance', 'location', 'evidence'];
+const FIELDS = ['name', 'option-a', 'option-b'];
 
 function load() {
   try {
     const data = JSON.parse(localStorage.getItem(PAGE_KEY) || '{}');
-    TEXT_FIELDS.forEach(f => {
+    FIELDS.forEach(f => {
       const el = document.getElementById('field-' + f);
       if (el && data[f]) el.value = data[f];
     });
-    if (data['option-a']) {
-      const radios = document.querySelectorAll('input[name="option"]');
-      radios.forEach(r => { if (r.value === data['option-a']) r.checked = true; });
-    }
   } catch(e) {}
 }
 
 function save() {
   try {
     const data = {};
-    TEXT_FIELDS.forEach(f => {
+    FIELDS.forEach(f => {
       const el = document.getElementById('field-' + f);
       if (el) data[f] = el.value;
     });
-    const checked = document.querySelector('input[name="option"]:checked');
-    if (checked) data['option-a'] = checked.value;
     localStorage.setItem(PAGE_KEY, JSON.stringify(data));
     const bar = document.getElementById('saveBar');
     bar.classList.add('show');
@@ -400,14 +358,6 @@ function save() {
     bar._t = setTimeout(() => bar.classList.remove('show'), 1600);
   } catch(e) {}
 }
-
-// Auto-fill mechanism field when a radio is selected
-document.querySelectorAll('input[name="option"]').forEach(r => {
-  r.addEventListener('change', () => {
-    document.getElementById('field-mechanism').value = r.value;
-    save();
-  });
-});
 
 load();
 document.querySelectorAll('input[type="text"], textarea').forEach(el => el.addEventListener('input', save));
