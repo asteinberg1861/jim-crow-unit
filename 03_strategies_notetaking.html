@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Six Strategies of Resistance — Note-Taking Handout</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1814;
+    --ink-soft: #5a564e;
+    --accent: #7a2f1f;
+    --paper: #ffffff;
+    --legal: #b91c1c;
+    --economic: #1e4d8f;
+    --direct: #c89320;
+    --electoral: #2d6a3a;
+    --institution: #6b3f8f;
+    --armed: #c75a1f;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #e8e3d9; color: var(--ink); }
+  body {
+    font-family: 'Fraunces', Georgia, serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: calc(42px + 2.5rem);
+    padding-bottom: 2.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    min-height: 100vh;
+  }
+
+  /* ─── Nav ─── */
+  .jc-nav {
+    position: fixed; top: 0; left: 0; right: 0; height: 42px; z-index: 100;
+    background: var(--ink);
+    display: flex; align-items: center; padding: 0 1.2rem; gap: 1.5rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7.8pt; letter-spacing: 0.14em; text-transform: uppercase;
+  }
+  .jc-nav a { color: rgba(232,227,217,0.65); text-decoration: none; transition: color 0.1s; }
+  .jc-nav a:hover { color: #e8e3d9; }
+  .jc-nav-brand { color: #c4956a !important; font-weight: 600; }
+  .jc-nav-links { display: flex; gap: 1.4rem; margin-left: auto; }
+  .jc-nav-print {
+    background: none; border: 1px solid rgba(232,227,217,0.25); cursor: pointer;
+    color: rgba(232,227,217,0.65); padding: 0.2rem 0.7rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7.4pt; letter-spacing: 0.14em; text-transform: uppercase;
+  }
+  .jc-nav-print:hover { color: #e8e3d9; border-color: rgba(232,227,217,0.5); }
+
+  .save-bar {
+    position: fixed; bottom: 1rem; right: 1.2rem; z-index: 50;
+    font-family: 'IBM Plex Mono', monospace; font-size: 7.6pt;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent); background: white;
+    padding: 0.3rem 0.8rem; border: 1px solid var(--accent);
+    opacity: 0; transition: opacity 0.3s; pointer-events: none;
+  }
+  .save-bar.show { opacity: 1; }
+
+  .sheet {
+    width: 8.5in;
+    min-height: 11in;
+    background: var(--paper);
+    padding: 0.45in 0.55in 0.35in;
+    box-shadow: 0 24px 70px rgba(30, 20, 10, 0.18);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  .tick {
+    position: absolute; width: 0.18in; height: 0.18in;
+    border-color: var(--ink); border-style: solid; border-width: 0;
+  }
+  .tick.tl { top: 0.2in; left: 0.2in; border-top-width: 1px; border-left-width: 1px; }
+  .tick.tr { top: 0.2in; right: 0.2in; border-top-width: 1px; border-right-width: 1px; }
+  .tick.bl { bottom: 0.2in; left: 0.2in; border-bottom-width: 1px; border-left-width: 1px; }
+  .tick.br { bottom: 0.2in; right: 0.2in; border-bottom-width: 1px; border-right-width: 1px; }
+
+  .header {
+    border-bottom: 1.4px solid var(--ink);
+    padding-bottom: 0.16in;
+    margin-bottom: 0.22in;
+  }
+  .meta {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8.2pt; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--ink-soft);
+    margin-bottom: 0.18in;
+  }
+  .meta .doc-id { color: var(--accent); font-weight: 500; }
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144;
+    font-weight: 900; font-size: 28pt;
+    line-height: 0.94; letter-spacing: -0.022em;
+  }
+  h1 .period { color: var(--accent); }
+  .subtitle {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5pt; letter-spacing: 0.28em;
+    text-transform: uppercase; color: var(--accent);
+    margin-top: 0.08in; font-weight: 500;
+  }
+
+  .name-row {
+    display: flex; align-items: center; gap: 0.14in; margin-top: 0.16in;
+  }
+  .name-row .label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9pt; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--ink-soft);
+    font-weight: 500; flex-shrink: 0;
+  }
+  input.name-input {
+    flex: 1; border: none; border-bottom: 1px solid var(--ink);
+    height: 0.26in; background: transparent; outline: none;
+    font-family: 'Fraunces', Georgia, serif; font-size: 12pt; color: var(--ink);
+    padding: 0 4px;
+  }
+  input.name-input:focus { background: #faf8f4; }
+
+  .frame {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 10pt;
+    line-height: 1.45;
+    color: var(--ink-soft);
+    margin-bottom: 0.16in;
+    padding-left: 0.18in;
+    border-left: 2px solid var(--accent);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.14in;
+    flex: 1;
+  }
+
+  .strategy {
+    border: 1px solid var(--ink);
+    padding: 0.12in 0.16in;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    min-height: 2in;
+  }
+
+  .strategy::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 5px;
+    background: var(--strategy-color);
+  }
+
+  .strategy.legal { --strategy-color: var(--legal); }
+  .strategy.economic { --strategy-color: var(--economic); }
+  .strategy.direct { --strategy-color: var(--direct); }
+  .strategy.electoral { --strategy-color: var(--electoral); }
+  .strategy.institution { --strategy-color: var(--institution); }
+  .strategy.armed { --strategy-color: var(--armed); }
+
+  .strat-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7.6pt;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--strategy-color);
+    font-weight: 600;
+    margin-top: 0.05in;
+    margin-bottom: 0.04in;
+  }
+
+  .strat-name {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 72;
+    font-weight: 600;
+    font-size: 12.5pt;
+    line-height: 1.05;
+    color: var(--ink);
+    margin-bottom: 0.06in;
+    letter-spacing: -0.005em;
+  }
+
+  .strat-section {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7.4pt;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 0.02in;
+    margin-top: 0.06in;
+    font-weight: 500;
+  }
+
+  input.strat-input {
+    border: none; border-bottom: 1px solid var(--ink);
+    width: 100%; height: 0.18in;
+    background: transparent; outline: none;
+    font-family: 'Fraunces', Georgia, serif; font-size: 9.5pt;
+    color: var(--ink); padding: 0 2px;
+    display: block;
+  }
+  input.strat-input:focus { background: rgba(0,0,0,0.02); }
+  input.strat-input + input.strat-input { margin-top: 0; }
+
+  footer {
+    margin-top: 0.2in;
+    padding-top: 0.14in;
+    border-top: 0.5px solid var(--ink);
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7.6pt; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--ink-soft);
+  }
+  footer .mark { color: var(--accent); font-weight: 500; }
+
+  @media print {
+    .jc-nav, .save-bar { display: none !important; }
+    html, body { background: #fff; padding: 0; margin: 0; }
+    body { display: block; }
+    .sheet { box-shadow: none; width: 100%; min-height: auto; }
+    @page { size: letter; margin: 0; }
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav class="jc-nav">
+  <a href="index.html" class="jc-nav-brand">Jim Crow in America</a>
+  <div class="jc-nav-links">
+    <a href="02_mechanisms_reference.html">Mechanisms</a>
+    <a href="04_strategy_groups.html">Strategy Groups</a>
+    <a href="interactive_yarn.html">Yarn Wall</a>
+  </div>
+  <button class="jc-nav-print" onclick="window.print()">Print</button>
+</nav>
+
+<div class="save-bar" id="saveBar">Saved</div>
+
+<div class="sheet">
+  <div class="tick tl"></div><div class="tick tr"></div>
+  <div class="tick bl"></div><div class="tick br"></div>
+
+  <header class="header">
+    <div class="meta">
+      <span>American Society &amp; Culture · Pingry</span>
+      <span class="doc-id">Doc. NT–02 · Lesson 2</span>
+    </div>
+    <h1>Six Strategies<br>of Resistance<span class="period">.</span></h1>
+    <div class="subtitle">Note-Taking</div>
+    <div class="name-row">
+      <span class="label">Name</span>
+      <input type="text" class="name-input" id="field-name" placeholder=" " autocomplete="off">
+    </div>
+  </header>
+
+  <div class="frame">
+    Black Americans never pursued one strategy against Jim Crow. They pursued at least six, often at the same time, often in the same town. As we walk through each strategy, note one defining example and one phrase that captures what makes it distinctive.
+  </div>
+
+  <div class="grid">
+    <div class="strategy legal">
+      <div class="strat-label">Strategy 01</div>
+      <div class="strat-name">Legal</div>
+      <div class="strat-section">Definition</div>
+      <input type="text" class="strat-input" id="f-legal-def1" placeholder=" " autocomplete="off">
+      <input type="text" class="strat-input" id="f-legal-def2" placeholder=" " autocomplete="off">
+      <div class="strat-section">Example &amp; year</div>
+      <input type="text" class="strat-input" id="f-legal-ex1" placeholder=" " autocomplete="off">
+      <input type="text" class="strat-input" id="f-legal-ex2" placeholder=" " autocomplete="off">
+    </div>
+
+    <div class="strategy economic">
+      <div class="strat-label">Strategy 02</div>
+      <div class="strat-name">Economic</div>
+      <div class="strat-section">Definition</div>
+      <input type="text" class="strat-input" id="f-econ-def1" placeholder=" " autocomplete="off">
+      <input type="text" class="strat-input" id="f-econ-def2" placeholder=" " autocomplete="off">
+      <div class="strat-section">Example &amp; year</div>
+      <input type="text" class="strat-input" id="f-econ-ex1" placeholder=" " autocomplete="off">
+      <input type="text" class="strat-input" id="f-econ-ex2" placeholder=" " autocomplete="off">
+    </div>
+
+    <div class="strategy direct">
+      <div class="strat-label">Strategy 03</div>
+      <div class="strat-name">Direct Action</div>
+      <div class="strat-section">Definition</div>
+      <input type="text" class="strat-input" id="f-direct-def1" placeholder=" " autocomplete="off">
+      <input type="text" class="strat-input" id="f-direct-def2" placeholder=" " autocomplete="off">
+      <div class="strat-section">Example &amp; year</div>
+      <input type="text" class="strat-input" id="f-direct-ex1" placeholder=" " autocomplete="off">
+      <input type="text" class="strat-input" id="f-direct-ex2" placeholder=" " autocomplete="off">
+    </div>
+
+    <div class="strategy electoral">
+      <div class="strat-label">Strategy 04</div>
+      <div class="strat-name">Electoral</div>
+      <div class="strat-section">Definition</div>
+      <input type="text" class="strat-input" id="f-elect-def1" placeholder=" " autocomplete="off">
+      <input type="text" class="strat-input" id="f-elect-def2" placeholder=" " autocomplete="off">
+      <div class="strat-section">Example &amp; year</div>
+      <input type="text" class="strat-input" id="f-elect-ex1" placeholder=" " autocomplete="off">
+      <input type="text" class="strat-input" id="f-elect-ex2" placeholder=" " autocomplete="off">
+    </div>
+
+    <div class="strategy institution">
+      <div class="strat-label">Strategy 05</div>
+      <div class="strat-name">Institution-Building</div>
+      <div class="strat-section">Definition</div>
+      <input type="text" class="strat-input" id="f-inst-def1" placeholder=" " autocomplete="off">
+      <input type="text" class="strat-input" id="f-inst-def2" placeholder=" " autocomplete="off">
+      <div class="strat-section">Example &amp; year</div>
+      <input type="text" class="strat-input" id="f-inst-ex1" placeholder=" " autocomplete="off">
+      <input type="text" class="strat-input" id="f-inst-ex2" placeholder=" " autocomplete="off">
+    </div>
+
+    <div class="strategy armed">
+      <div class="strat-label">Strategy 06</div>
+      <div class="strat-name">Armed Self-Defense</div>
+      <div class="strat-section">Definition</div>
+      <input type="text" class="strat-input" id="f-armed-def1" placeholder=" " autocomplete="off">
+      <input type="text" class="strat-input" id="f-armed-def2" placeholder=" " autocomplete="off">
+      <div class="strat-section">Example &amp; year</div>
+      <input type="text" class="strat-input" id="f-armed-ex1" placeholder=" " autocomplete="off">
+      <input type="text" class="strat-input" id="f-armed-ex2" placeholder=" " autocomplete="off">
+    </div>
+  </div>
+
+  <footer>
+    <span>The Pingry School</span>
+    <span class="mark">US History · 11</span>
+  </footer>
+</div>
+
+<script>
+const PAGE_KEY = 'jc-nt02';
+const FIELDS = [
+  'name',
+  'legal-def1','legal-def2','legal-ex1','legal-ex2',
+  'econ-def1','econ-def2','econ-ex1','econ-ex2',
+  'direct-def1','direct-def2','direct-ex1','direct-ex2',
+  'elect-def1','elect-def2','elect-ex1','elect-ex2',
+  'inst-def1','inst-def2','inst-ex1','inst-ex2',
+  'armed-def1','armed-def2','armed-ex1','armed-ex2',
+];
+
+function load() {
+  try {
+    const data = JSON.parse(localStorage.getItem(PAGE_KEY) || '{}');
+    FIELDS.forEach(f => {
+      const el = document.getElementById('f-' + f) || document.getElementById('field-' + f);
+      if (el && data[f]) el.value = data[f];
+    });
+  } catch(e) {}
+}
+
+function save() {
+  try {
+    const data = {};
+    FIELDS.forEach(f => {
+      const el = document.getElementById('f-' + f) || document.getElementById('field-' + f);
+      if (el) data[f] = el.value;
+    });
+    localStorage.setItem(PAGE_KEY, JSON.stringify(data));
+    const bar = document.getElementById('saveBar');
+    bar.classList.add('show');
+    clearTimeout(bar._t);
+    bar._t = setTimeout(() => bar.classList.remove('show'), 1600);
+  } catch(e) {}
+}
+
+load();
+document.querySelectorAll('input').forEach(el => el.addEventListener('input', save));
+</script>
+</body>
+</html>

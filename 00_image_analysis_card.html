@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Jim Crow in America — Image Analysis Card</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400;1,9..144,900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1814;
+    --ink-soft: #5a564e;
+    --accent: #7a2f1f;
+    --paper: #ffffff;
+    --margin-x: 0.6in;
+    --margin-top: 0.45in;
+    --margin-bottom: 0.35in;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #e8e3d9; color: var(--ink); }
+  body {
+    font-family: 'Fraunces', Georgia, serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: calc(42px + 2.5rem);
+    padding-bottom: 2.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    min-height: 100vh;
+  }
+
+  /* ─── Nav ─── */
+  .jc-nav {
+    position: fixed; top: 0; left: 0; right: 0; height: 42px; z-index: 100;
+    background: var(--ink);
+    display: flex; align-items: center; padding: 0 1.2rem; gap: 1.5rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7.8pt; letter-spacing: 0.14em; text-transform: uppercase;
+  }
+  .jc-nav a { color: rgba(232,227,217,0.65); text-decoration: none; transition: color 0.1s; }
+  .jc-nav a:hover { color: #e8e3d9; }
+  .jc-nav-brand { color: #c4956a !important; font-weight: 600; }
+  .jc-nav-links { display: flex; gap: 1.4rem; margin-left: auto; }
+  .jc-nav-print {
+    background: none; border: 1px solid rgba(232,227,217,0.25); cursor: pointer;
+    color: rgba(232,227,217,0.65); padding: 0.2rem 0.7rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7.4pt; letter-spacing: 0.14em; text-transform: uppercase;
+    transition: color 0.1s, border-color 0.1s;
+  }
+  .jc-nav-print:hover { color: #e8e3d9; border-color: rgba(232,227,217,0.5); }
+
+  /* Save indicator */
+  .save-bar {
+    position: fixed; bottom: 1rem; right: 1.2rem; z-index: 50;
+    font-family: 'IBM Plex Mono', monospace; font-size: 7.6pt;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent); background: white;
+    padding: 0.3rem 0.8rem; border: 1px solid var(--accent);
+    opacity: 0; transition: opacity 0.3s; pointer-events: none;
+  }
+  .save-bar.show { opacity: 1; }
+
+  .sheet {
+    width: 8.5in;
+    min-height: 11in;
+    background: var(--paper);
+    padding: var(--margin-top) var(--margin-x) var(--margin-bottom);
+    box-shadow: 0 24px 70px rgba(30, 20, 10, 0.18),
+                0 4px 14px rgba(30, 20, 10, 0.08);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  /* Header */
+  .header {
+    border-bottom: 1.4px solid var(--ink);
+    padding-bottom: 0.16in;
+    margin-bottom: 0.2in;
+  }
+  .meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8.2pt;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 0.16in;
+  }
+  .meta .doc-id {
+    color: var(--accent);
+    font-weight: 500;
+  }
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144;
+    font-weight: 900;
+    font-size: 36pt;
+    line-height: 0.92;
+    letter-spacing: -0.022em;
+    color: var(--ink);
+  }
+  h1 .period { color: var(--accent); }
+  .subtitle {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10pt;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-top: 0.1in;
+    font-weight: 500;
+  }
+  .name-row {
+    display: flex;
+    align-items: center;
+    gap: 0.14in;
+    margin-top: 0.16in;
+  }
+  .name-row .label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5pt;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+  input.name-input {
+    flex: 1;
+    border: none; border-bottom: 1px solid var(--ink);
+    height: 0.3in; background: transparent; outline: none;
+    font-family: 'Fraunces', Georgia, serif; font-size: 12pt;
+    color: var(--ink); padding: 0 4px;
+  }
+  input.name-input:focus { background: #faf8f4; }
+
+  /* Main grid of sections */
+  main {
+    display: flex;
+    flex-direction: column;
+    gap: 0.16in;
+    flex: 1;
+  }
+  section {
+    display: grid;
+    grid-template-columns: 0.7in 1fr;
+    gap: 0.15in;
+    align-items: start;
+  }
+  .numeral {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144;
+    font-weight: 900;
+    font-style: italic;
+    font-size: 38pt;
+    line-height: 0.8;
+    color: var(--accent);
+    margin-top: -0.04in;
+  }
+  .section-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8.4pt;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 0.06in;
+    font-weight: 500;
+  }
+  .prompt-title {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 72;
+    font-weight: 600;
+    font-size: 13pt;
+    line-height: 1.12;
+    color: var(--ink);
+    margin-bottom: 0.04in;
+    letter-spacing: -0.005em;
+  }
+  .prompt-sub {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 10pt;
+    color: var(--ink-soft);
+    line-height: 1.32;
+    margin-bottom: 0.08in;
+  }
+
+  /* Input lines */
+  .input-lines { display: flex; flex-direction: column; gap: 0; }
+  input.line-input {
+    border: none; border-bottom: 1px solid var(--ink);
+    width: 100%; height: 0.32in;
+    background: transparent; outline: none;
+    font-family: 'Fraunces', Georgia, serif; font-size: 11pt;
+    color: var(--ink); padding: 0 4px;
+  }
+  input.line-input:focus { background: rgba(122,47,31,0.03); }
+
+  /* Section 2 — facts */
+  .facts {
+    display: flex;
+    flex-direction: column;
+    gap: 0.03in;
+    margin-top: 0.02in;
+  }
+  .fact {
+    display: flex;
+    align-items: center;
+    gap: 0.12in;
+  }
+  .fact .fact-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9pt;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink);
+    width: 2.3in;
+    flex-shrink: 0;
+    font-weight: 500;
+  }
+  input.fact-input {
+    flex: 1;
+    border: none; border-bottom: 1px solid var(--ink);
+    height: 0.28in; background: transparent; outline: none;
+    font-family: 'Fraunces', Georgia, serif; font-size: 11pt;
+    color: var(--ink); padding: 0 4px;
+  }
+  input.fact-input:focus { background: rgba(122,47,31,0.03); }
+
+  /* Section 3 — mechanisms */
+  .mechanisms {
+    display: flex;
+    flex-direction: column;
+    gap: 0.05in;
+    margin-top: 0.02in;
+  }
+  .mech {
+    display: flex;
+    align-items: center;
+    gap: 0.15in;
+    font-family: 'Fraunces', serif;
+    font-size: 11pt;
+    font-weight: 400;
+    cursor: pointer;
+  }
+  .mech input[type="checkbox"] {
+    width: 0.22in; height: 0.22in;
+    border: 1.3px solid var(--ink);
+    border-radius: 50%;
+    appearance: none; -webkit-appearance: none;
+    cursor: pointer; flex-shrink: 0;
+    background: transparent; outline: none;
+    position: relative;
+  }
+  .mech input[type="checkbox"]:checked {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .mech input[type="checkbox"]:checked::after {
+    content: '✓';
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    color: white; font-size: 9pt; line-height: 1;
+  }
+  .mech .mech-label { line-height: 1.2; }
+
+  /* Footer */
+  footer {
+    margin-top: auto;
+    padding-top: 0.14in;
+    border-top: 0.5px solid var(--ink);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7.6pt;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  footer .mark {
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  /* Corner tick marks */
+  .tick {
+    position: absolute;
+    width: 0.18in;
+    height: 0.18in;
+    border-color: var(--ink);
+    border-style: solid;
+    border-width: 0;
+  }
+  .tick.tl { top: 0.2in; left: 0.2in; border-top-width: 1px; border-left-width: 1px; }
+  .tick.tr { top: 0.2in; right: 0.2in; border-top-width: 1px; border-right-width: 1px; }
+  .tick.bl { bottom: 0.2in; left: 0.2in; border-bottom-width: 1px; border-left-width: 1px; }
+  .tick.br { bottom: 0.2in; right: 0.2in; border-bottom-width: 1px; border-right-width: 1px; }
+
+  /* Print */
+  @media print {
+    .jc-nav, .save-bar { display: none !important; }
+    html, body { background: #fff; padding: 0; margin: 0; }
+    body { display: block; }
+    .sheet {
+      box-shadow: none;
+      width: 100%;
+      min-height: auto;
+      page-break-after: avoid;
+    }
+    @page { size: letter; margin: 0; }
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    input.line-input, input.fact-input, input.name-input {
+      border-bottom: 1px solid var(--ink);
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav class="jc-nav">
+  <a href="index.html" class="jc-nav-brand">Jim Crow in America</a>
+  <div class="jc-nav-links">
+    <a href="01_context_cards.html">Context</a>
+    <a href="02_mechanisms_reference.html">Mechanisms</a>
+    <a href="index.html#lesson-2">Lesson 2</a>
+  </div>
+  <button class="jc-nav-print" onclick="window.print()">Print</button>
+</nav>
+
+<div class="save-bar" id="saveBar">Saved</div>
+
+  <div class="sheet">
+    <div class="tick tl"></div>
+    <div class="tick tr"></div>
+    <div class="tick bl"></div>
+    <div class="tick br"></div>
+
+    <header class="header">
+      <div class="meta">
+        <span>American Society &amp; Culture · Pingry</span>
+        <span class="doc-id">Doc. IA–01</span>
+      </div>
+      <h1>Jim Crow<br>in America<span class="period">.</span></h1>
+      <div class="subtitle">Image Analysis</div>
+      <div class="name-row">
+        <span class="label">Name</span>
+        <input type="text" class="name-input" id="field-name" placeholder=" " autocomplete="off">
+      </div>
+    </header>
+
+    <main>
+      <!-- 1 -->
+      <section>
+        <div class="numeral">1</div>
+        <div class="content">
+          <div class="section-label">The image</div>
+          <div class="prompt-title">What is happening in this image?</div>
+          <div class="prompt-sub">Describe what you see in 1–2 sentences. Don't interpret yet — describe.</div>
+          <div class="input-lines">
+            <input type="text" class="line-input" id="field-s1-1" placeholder=" " autocomplete="off">
+            <input type="text" class="line-input" id="field-s1-2" placeholder=" " autocomplete="off">
+          </div>
+        </div>
+      </section>
+
+      <!-- 2 -->
+      <section>
+        <div class="numeral">2</div>
+        <div class="content">
+          <div class="section-label">The facts</div>
+          <div class="facts">
+            <div class="fact">
+              <div class="fact-label">Location (city, state)</div>
+              <input type="text" class="fact-input" id="field-location" placeholder=" " autocomplete="off">
+            </div>
+            <div class="fact">
+              <div class="fact-label">Date (or decade)</div>
+              <input type="text" class="fact-input" id="field-date" placeholder=" " autocomplete="off">
+            </div>
+            <div class="fact">
+              <div class="fact-label">Photographer / source</div>
+              <input type="text" class="fact-input" id="field-source" placeholder=" " autocomplete="off">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3 -->
+      <section>
+        <div class="numeral">3</div>
+        <div class="content">
+          <div class="section-label">The mechanism</div>
+          <div class="prompt-title">Which of these does this image show?</div>
+          <div class="prompt-sub">Check all that apply.</div>
+          <div class="mechanisms">
+            <label class="mech"><input type="checkbox" id="mech-1"><div class="mech-label">Law / legal segregation</div></label>
+            <label class="mech"><input type="checkbox" id="mech-2"><div class="mech-label">Economic control</div></label>
+            <label class="mech"><input type="checkbox" id="mech-3"><div class="mech-label">Violence or the threat of violence</div></label>
+            <label class="mech"><input type="checkbox" id="mech-4"><div class="mech-label">Spatial / architectural separation</div></label>
+            <label class="mech"><input type="checkbox" id="mech-5"><div class="mech-label">Daily life under segregation</div></label>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4 -->
+      <section>
+        <div class="numeral">4</div>
+        <div class="content">
+          <div class="section-label">Your analysis</div>
+          <div class="prompt-title">What does this image reveal about <em>how</em> Jim Crow worked — not just that it existed?</div>
+          <div class="prompt-sub">3–4 sentences. Who benefited? Who was harmed? What does this image show that a written description might miss?</div>
+          <div class="input-lines">
+            <input type="text" class="line-input" id="field-s4-1" placeholder=" " autocomplete="off">
+            <input type="text" class="line-input" id="field-s4-2" placeholder=" " autocomplete="off">
+            <input type="text" class="line-input" id="field-s4-3" placeholder=" " autocomplete="off">
+            <input type="text" class="line-input" id="field-s4-4" placeholder=" " autocomplete="off">
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>The Pingry School</span>
+      <span class="mark">US History · 11</span>
+    </footer>
+  </div>
+
+<script>
+const PAGE_KEY = 'jc-ia01';
+const FIELDS = ['name','s1-1','s1-2','location','date','source','s4-1','s4-2','s4-3','s4-4'];
+const CHECKS = ['mech-1','mech-2','mech-3','mech-4','mech-5'];
+
+function load() {
+  try {
+    const data = JSON.parse(localStorage.getItem(PAGE_KEY) || '{}');
+    FIELDS.forEach(f => {
+      const el = document.getElementById('field-' + f);
+      if (el && data[f]) el.value = data[f];
+    });
+    CHECKS.forEach(c => {
+      const el = document.getElementById(c);
+      if (el && data[c]) el.checked = true;
+    });
+  } catch(e) {}
+}
+
+function save() {
+  try {
+    const data = {};
+    FIELDS.forEach(f => {
+      const el = document.getElementById('field-' + f);
+      if (el) data[f] = el.value;
+    });
+    CHECKS.forEach(c => {
+      const el = document.getElementById(c);
+      if (el) data[c] = el.checked;
+    });
+    localStorage.setItem(PAGE_KEY, JSON.stringify(data));
+    const bar = document.getElementById('saveBar');
+    bar.classList.add('show');
+    clearTimeout(bar._t);
+    bar._t = setTimeout(() => bar.classList.remove('show'), 1600);
+  } catch(e) {}
+}
+
+load();
+document.querySelectorAll('input').forEach(el => el.addEventListener('input', save));
+document.querySelectorAll('input[type=checkbox]').forEach(el => el.addEventListener('change', save));
+</script>
+</body>
+</html>

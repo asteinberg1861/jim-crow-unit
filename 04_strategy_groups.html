@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Strategy Group Handouts — Lesson 2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1814;
+    --ink-soft: #5a564e;
+    --accent: #7a2f1f;
+    --paper: #ffffff;
+    --group-color: #7a2f1f;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #e8e3d9; color: var(--ink); }
+  body {
+    font-family: 'Fraunces', Georgia, serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: calc(42px + 2rem);
+    padding-bottom: 2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    min-height: 100vh;
+  }
+
+  /* ─── Nav ─── */
+  .jc-nav {
+    position: fixed; top: 0; left: 0; right: 0; height: 42px; z-index: 100;
+    background: var(--ink);
+    display: flex; align-items: center; padding: 0 1.2rem; gap: 1.5rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7.8pt; letter-spacing: 0.14em; text-transform: uppercase;
+  }
+  .jc-nav a { color: rgba(232,227,217,0.65); text-decoration: none; transition: color 0.1s; }
+  .jc-nav a:hover { color: #e8e3d9; }
+  .jc-nav-brand { color: #c4956a !important; font-weight: 600; }
+  .jc-nav-links { display: flex; gap: 1.4rem; margin-left: auto; }
+  .jc-nav-print {
+    background: none; border: 1px solid rgba(232,227,217,0.25); cursor: pointer;
+    color: rgba(232,227,217,0.65); padding: 0.2rem 0.7rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7.4pt; letter-spacing: 0.14em; text-transform: uppercase;
+  }
+  .jc-nav-print:hover { color: #e8e3d9; border-color: rgba(232,227,217,0.5); }
+
+  /* ─── Group tabs (screen only) ─── */
+  .group-tabs {
+    width: 8.5in;
+    display: flex;
+    background: var(--paper);
+    border: 1px solid var(--ink);
+    border-bottom: none;
+    margin-bottom: 0;
+    overflow: hidden;
+  }
+  .group-tab {
+    flex: 1;
+    padding: 0.5rem 0.4rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7.4pt; letter-spacing: 0.14em;
+    text-transform: uppercase; font-weight: 600;
+    border: none; background: none; cursor: pointer;
+    color: var(--ink-soft);
+    border-bottom: 3px solid transparent;
+    transition: color 0.12s, background 0.12s, border-color 0.12s;
+    position: relative;
+    bottom: -1px;
+  }
+  .group-tab:hover { background: #f5f0e6; color: var(--ink); }
+  .group-tab.active {
+    color: var(--tab-color);
+    border-bottom-color: var(--tab-color);
+    background: var(--paper);
+  }
+
+  /* ─── Sheets ─── */
+  .sheet {
+    width: 8.5in;
+    min-height: 11in;
+    background: var(--paper);
+    margin-bottom: 2rem;
+    padding: 0.55in 0.55in 0.4in;
+    box-shadow: 0 24px 70px rgba(30, 20, 10, 0.18);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  /* Screen: hide all sheets, show active */
+  @media screen {
+    .sheet { display: none; margin-bottom: 0; }
+    .sheet.active { display: flex; }
+    .group-tabs { display: flex; }
+  }
+
+  /* Print: show all, hide tabs */
+  @media print {
+    .jc-nav, .group-tabs { display: none !important; }
+    .sheet { display: flex !important; }
+    html, body { background: #fff; padding: 0; margin: 0; }
+    body { display: block; align-items: unset; }
+    .sheet {
+      box-shadow: none;
+      page-break-after: always;
+      width: 100%; min-height: auto;
+    }
+    .sheet:last-child { page-break-after: avoid; }
+    @page { size: letter; margin: 0; }
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .strategy-bar { height: 8px; width: 100%; margin-bottom: 0.18in; }
+  .sheet.legal .strategy-bar   { background: #b91c1c; }
+  .sheet.economic .strategy-bar { background: #1e4d8f; }
+  .sheet.direct .strategy-bar   { background: #c89320; }
+  .sheet.electoral .strategy-bar { background: #2d6a3a; }
+  .sheet.institution .strategy-bar { background: #6b3f8f; }
+  .sheet.armed .strategy-bar    { background: #c75a1f; }
+
+  .sheet.legal .accent-color, .sheet.legal .yarn-name  { color: #b91c1c; }
+  .sheet.economic .accent-color, .sheet.economic .yarn-name { color: #1e4d8f; }
+  .sheet.direct .accent-color, .sheet.direct .yarn-name    { color: #c89320; }
+  .sheet.electoral .accent-color, .sheet.electoral .yarn-name { color: #2d6a3a; }
+  .sheet.institution .accent-color, .sheet.institution .yarn-name { color: #6b3f8f; }
+  .sheet.armed .accent-color, .sheet.armed .yarn-name      { color: #c75a1f; }
+
+  .meta {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8.2pt; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--ink-soft);
+    margin-bottom: 0.18in;
+  }
+  .meta .doc-id { color: var(--accent); font-weight: 500; }
+
+  .header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 1.4px solid var(--ink);
+    padding-bottom: 0.18in;
+    margin-bottom: 0.24in;
+  }
+
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144;
+    font-weight: 900; font-size: 36pt;
+    line-height: 0.94; letter-spacing: -0.022em;
+  }
+  h1 .period { color: var(--accent); }
+
+  .yarn-info { text-align: right; }
+  .yarn-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8pt; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--ink-soft);
+    margin-bottom: 0.04in;
+  }
+  .yarn-name {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12pt; letter-spacing: 0.14em;
+    text-transform: uppercase; font-weight: 600;
+  }
+
+  .definition {
+    font-family: 'Fraunces', serif;
+    font-style: italic; font-size: 11pt; line-height: 1.5;
+    color: var(--ink); margin-bottom: 0.24in;
+    padding-left: 0.18in; border-left: 2px solid var(--accent);
+  }
+
+  .task-box {
+    background: #f5f0e6; border: 1px solid var(--ink);
+    padding: 0.18in 0.22in; margin-bottom: 0.24in;
+  }
+  .task-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8.2pt; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--accent);
+    font-weight: 600; margin-bottom: 0.06in;
+  }
+  .task-text { font-family: 'Fraunces', serif; font-size: 10.5pt; line-height: 1.45; }
+
+  /* ─── Digital task hint (screen only) ─── */
+  .digital-hint {
+    background: #1a1814; color: #e8e3d9;
+    padding: 0.14in 0.22in; margin-bottom: 0.24in;
+    display: flex; align-items: center; gap: 0.8rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8pt; letter-spacing: 0.12em; text-transform: uppercase;
+  }
+  .digital-hint a {
+    color: #c4956a; font-weight: 600; text-decoration: none;
+    border-bottom: 1px solid rgba(196,149,106,0.4);
+  }
+  .digital-hint a:hover { border-bottom-color: #c4956a; }
+  @media print { .digital-hint { display: none; } }
+
+  .events-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9pt; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--ink-soft);
+    margin-bottom: 0.12in; font-weight: 500;
+    border-bottom: 0.5px solid var(--ink-soft);
+    padding-bottom: 0.06in;
+  }
+
+  .events { display: flex; flex-direction: column; gap: 0.12in; }
+
+  .event {
+    display: grid;
+    grid-template-columns: 0.6in 1fr;
+    gap: 0.12in; align-items: start;
+  }
+
+  .event-year {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 72;
+    font-weight: 600; font-size: 13pt;
+    color: var(--accent); line-height: 1.1;
+  }
+
+  .event-name {
+    font-family: 'Fraunces', serif;
+    font-weight: 600; font-size: 11.5pt;
+    line-height: 1.2; margin-bottom: 0.04in;
+  }
+
+  .event-desc {
+    font-family: 'Fraunces', serif;
+    font-size: 9.8pt; line-height: 1.4; color: var(--ink);
+  }
+
+  .event-source {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7.6pt; letter-spacing: 0.04em;
+    color: var(--ink-soft); margin-top: 0.04in;
+  }
+
+  footer {
+    margin-top: auto; padding-top: 0.18in;
+    border-top: 0.5px solid var(--ink);
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7.6pt; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--ink-soft);
+  }
+  footer .mark { color: var(--accent); font-weight: 500; }
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav class="jc-nav">
+  <a href="index.html" class="jc-nav-brand">Jim Crow in America</a>
+  <div class="jc-nav-links">
+    <a href="02_mechanisms_reference.html">Mechanisms</a>
+    <a href="interactive_yarn.html">Yarn Wall</a>
+    <a href="05_yarn_cards.html">Connection Cards</a>
+  </div>
+  <button class="jc-nav-print" onclick="window.print()">Print All</button>
+</nav>
+
+<!-- Group tabs (screen only) -->
+<div class="group-tabs">
+  <button class="group-tab active" style="--tab-color:#b91c1c" onclick="showGroup('legal',this)">A · Legal</button>
+  <button class="group-tab" style="--tab-color:#1e4d8f" onclick="showGroup('economic',this)">B · Economic</button>
+  <button class="group-tab" style="--tab-color:#c89320" onclick="showGroup('direct',this)">C · Direct Action</button>
+  <button class="group-tab" style="--tab-color:#2d6a3a" onclick="showGroup('electoral',this)">D · Electoral</button>
+  <button class="group-tab" style="--tab-color:#6b3f8f" onclick="showGroup('institution',this)">E · Institution-Building</button>
+  <button class="group-tab" style="--tab-color:#c75a1f" onclick="showGroup('armed',this)">F · Armed Self-Defense</button>
+</div>
+
+<!-- LEGAL -->
+<div class="sheet legal active" id="sheet-legal">
+  <div class="strategy-bar"></div>
+  <div class="meta">
+    <span>American Society &amp; Culture · Pingry</span>
+    <span class="doc-id">Doc. SG–02A · Lesson 2</span>
+  </div>
+  <div class="header-row">
+    <h1>Legal<span class="period">.</span></h1>
+    <div class="yarn-info">
+      <div class="yarn-label">Your yarn</div>
+      <div class="yarn-name">Red</div>
+    </div>
+  </div>
+  <div class="definition">
+    Using courts, litigation, and constitutional argument to dismantle segregation through judicial decisions. The slow, expensive, generational work of building case law strong enough to topple Plessy.
+  </div>
+  <div class="digital-hint">
+    → Do the yarn activity digitally: <a href="interactive_yarn.html">Open the Digital Yarn Wall</a> and select Group A
+  </div>
+  <div class="task-box">
+    <div class="task-label">Your task</div>
+    <div class="task-text">For each event below, decide which image(s) on the wall represent the mechanism that event was targeting. Run red yarn from your event card to the image(s). On the index card attached to the yarn, write: the event, the year, the mechanism it targeted, and 1–2 sentences explaining the connection.</div>
+  </div>
+  <div class="events-label">Your events</div>
+  <div class="events">
+    <div class="event">
+      <div class="event-year">1909</div>
+      <div>
+        <div class="event-name">NAACP founded</div>
+        <div class="event-desc">A coalition of Black activists (W.E.B. Du Bois, Ida B. Wells) and white reformers founds the NAACP in response to the 1908 Springfield, IL race riot. Its Legal Defense Fund will spend the next four decades building the case law that brings down Plessy.</div>
+        <div class="event-source">naacpldf.org/about-us/history</div>
+      </div>
+    </div>
+    <div class="event">
+      <div class="event-year">1948</div>
+      <div>
+        <div class="event-name">Shelley v. Kraemer</div>
+        <div class="event-desc">Supreme Court rules that racially restrictive covenants in property deeds cannot be enforced by courts. The deeds remain on the books; what changes is that no court will enforce them. NAACP victory argued by Thurgood Marshall.</div>
+        <div class="event-source">oyez.org/cases/1940-1955/334us1</div>
+      </div>
+    </div>
+    <div class="event">
+      <div class="event-year">1954</div>
+      <div>
+        <div class="event-name">Brown v. Board of Education</div>
+        <div class="event-desc">Supreme Court overturns Plessy v. Ferguson, ruling segregated schools "inherently unequal." Five consolidated cases, including Briggs v. Elliott from Clarendon County, SC. Decision is unanimous.</div>
+        <div class="event-source">oyez.org/cases/1940-1955/347us483</div>
+      </div>
+    </div>
+    <div class="event">
+      <div class="event-year">1957</div>
+      <div>
+        <div class="event-name">Little Rock Nine</div>
+        <div class="event-desc">Nine Black students integrate Central High School in Little Rock, AR, three years after Brown. Governor Faubus calls out the Arkansas National Guard to block them; Eisenhower federalizes the Guard and sends the 101st Airborne to escort the students to class.</div>
+        <div class="event-source">nps.gov/chsc</div>
+      </div>
+    </div>
+    <div class="event">
+      <div class="event-year">1964</div>
+      <div>
+        <div class="event-name">Civil Rights Act</div>
+        <div class="event-desc">Bans discrimination in public accommodations, employment, and federally funded programs. Signed by LBJ on July 2, 1964. The legal architecture of Jim Crow — the signs, the separate facilities, the legal segregation — becomes federally illegal.</div>
+        <div class="event-source">archives.gov/milestone-documents/civil-rights-act</div>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <span>The Pingry School</span>
+    <span class="mark">US History · 11 · Group A</span>
+  </footer>
+</div>
+
+<!-- ECONOMIC -->
+<div class="sheet economic" id="sheet-economic">
+  <div class="strategy-bar"></div>
+  <div class="meta">
+    <span>American Society &amp; Culture · Pingry</span>
+    <span class="doc-id">Doc. SG–02B · Lesson 2</span>
+  </div>
+  <div class="header-row">
+    <h1>Economic<span class="period">.</span></h1>
+    <div class="yarn-info">
+      <div class="yarn-label">Your yarn</div>
+      <div class="yarn-name">Blue</div>
+    </div>
+  </div>
+  <div class="definition">
+    Using collective economic pressure — boycotts, withholding labor, redirecting consumer power — to make segregation financially unsustainable. The strategy that runs on the dollar.
+  </div>
+  <div class="digital-hint">
+    → Do the yarn activity digitally: <a href="interactive_yarn.html">Open the Digital Yarn Wall</a> and select Group B
+  </div>
+  <div class="task-box">
+    <div class="task-label">Your task</div>
+    <div class="task-text">For each event below, decide which image(s) on the wall represent the mechanism that event was targeting. Run blue yarn from your event card to the image(s). On the index card attached to the yarn, write: the event, the year, the mechanism it targeted, and 1–2 sentences explaining the connection.</div>
+  </div>
+  <div class="events-label">Your events</div>
+  <div class="events">
+    <div class="event">
+      <div class="event-year">1940s</div>
+      <div>
+        <div class="event-name">"Don't Buy Where You Can't Work" campaigns</div>
+        <div class="event-desc">Black communities in cities across the North and South boycott white-owned businesses that refused to hire Black workers. The campaigns built the organizational muscle that made later boycotts possible.</div>
+        <div class="event-source">blackpast.org · Don't Buy Where You Can't Work</div>
+      </div>
+    </div>
+    <div class="event">
+      <div class="event-year">1955–56</div>
+      <div>
+        <div class="event-name">Montgomery Bus Boycott</div>
+        <div class="event-desc">After Rosa Parks's arrest on December 1, 1955, the Women's Political Council (Jo Ann Robinson) and the Montgomery Improvement Association organize a 381-day boycott of city buses. Black ridership was 75% of the system's revenue.</div>
+        <div class="event-source">kinginstitute.stanford.edu/montgomery-bus-boycott</div>
+      </div>
+    </div>
+    <div class="event">
+      <div class="event-year">1956</div>
+      <div>
+        <div class="event-name">Tallahassee Bus Boycott</div>
+        <div class="event-desc">Sparked by the arrest of Wilhelmina Jakes and Carrie Patterson, two FAMU students who refused to give up their seats on a Tallahassee bus. The boycott lasted seven months.</div>
+        <div class="event-source">floridamemory.com (search "Tallahassee bus boycott")</div>
+      </div>
+    </div>
+    <div class="event">
+      <div class="event-year">1962</div>
+      <div>
+        <div class="event-name">Albany Movement boycotts</div>
+        <div class="event-desc">In Albany, GA, Black residents boycott segregated buses, white-owned downtown businesses, and segregated facilities. The city closed parks rather than integrate them — but it taught the SCLC lessons that shaped Birmingham.</div>
+        <div class="event-source">snccdigital.org · Albany Movement</div>
+      </div>
+    </div>
+    <div class="event">
+      <div class="event-year">1968</div>
+      <div>
+        <div class="event-name">Memphis Sanitation Workers Strike</div>
+        <div class="event-desc">After two Black sanitation workers were crushed to death in a malfunctioning truck, 1,300 Memphis sanitation workers go on strike. "I AM A MAN" placards. Dr. King traveled to support the strike and was assassinated there on April 4, 1968.</div>
+        <div class="event-source">aflcio.org · Memphis Sanitation Strike</div>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <span>The Pingry School</span>
+    <span class="mark">US History · 11 · Group B</span>
+  </footer>
+</div>
+
+<!-- DIRECT ACTION -->
+<div class="sheet direct" id="sheet-direct">
+  <div class="strategy-bar"></div>
+  <div class="meta">
+    <span>American Society &amp; Culture · Pingry</span>
+    <span class="doc-id">Doc. SG–02C · Lesson 2</span>
+  </div>
+  <div class="header-row">
+    <h1>Direct Action<span class="period">.</span></h1>
+    <div class="yarn-info">
+      <div class="yarn-label">Your yarn</div>
+      <div class="yarn-name">Yellow</div>
+    </div>
+  </div>
+  <div class="definition">
+    Public, often nonviolent confrontation with segregation through bodies in space. Sit-ins, marches, freedom rides — putting the system on television and forcing the country to watch.
+  </div>
+  <div class="digital-hint">
+    → Do the yarn activity digitally: <a href="interactive_yarn.html">Open the Digital Yarn Wall</a> and select Group C
+  </div>
+  <div class="task-box">
+    <div class="task-label">Your task</div>
+    <div class="task-text">For each event below, decide which image(s) on the wall represent the mechanism that event was targeting. Run yellow yarn from your event card to the image(s). On the index card attached to the yarn, write: the event, the year, the mechanism it targeted, and 1–2 sentences explaining the connection.</div>
+  </div>
+  <div class="events-label">Your events</div>
+  <div class="events">
+    <div class="event">
+      <div class="event-year">1960</div>
+      <div>
+        <div class="event-name">Greensboro sit-ins</div>
+        <div class="event-desc">Four students from North Carolina A&T sit at the Woolworth's lunch counter in downtown Greensboro and refuse to leave. By the end of the week, hundreds of students join. Within two months, sit-ins spread to 55 cities in 13 states.</div>
+        <div class="event-source">sitinmovement.org</div>
+      </div>
+    </div>
+    <div class="event">
+      <div class="event-year">1961</div>
+      <div>
+        <div class="event-name">Freedom Rides</div>
+        <div class="event-desc">Black and white CORE activists ride interstate buses through the South to test the Supreme Court's ruling against segregation in interstate travel. Riders are beaten in Anniston, AL (their bus is firebombed), Birmingham, and Montgomery.</div>
+        <div class="event-source">nps.gov/articles/the-freedom-riders.htm</div>
+      </div>
+    </div>
+    <div class="event">
+      <div class="event-year">1963</div>
+      <div>
+        <div class="event-name">Birmingham Campaign</div>
+        <div class="event-desc">SCLC and Birmingham activists target what King called "the most segregated city in America." Police Commissioner Bull Connor turns fire hoses and police dogs on schoolchildren. The images go national. Within months, Birmingham desegregates downtown facilities.</div>
+        <div class="event-source">kinginstitute.stanford.edu/birmingham-campaign</div>
+      </div>
+    </div>
+    <div class="event">
+      <div class="event-year">1963</div>
+      <div>
+        <div class="event-name">March on Washington</div>
+        <div class="event-desc">250,000 marchers gather at the Lincoln Memorial. King delivers the "I Have a Dream" speech. The march helps build pressure for the Civil Rights Act of 1964. Organized largely by Bayard Rustin, A. Philip Randolph, and the labor movement.</div>
+        <div class="event-source">archives.gov · March on Washington</div>
+      </div>
+    </div>
+    <div class="event">
+      <div class="event-year">1965</div>
+      <div>
+        <div class="event-name">Selma to Montgomery marches</div>
+        <div class="event-desc">Three attempted marches from Selma to the Alabama state capital. The first, on March 7, is broken up by state troopers on the Edmund Pettus Bridge ("Bloody Sunday"). The third, completed under federal protection, helps secure passage of the Voting Rights Act five months later.</div>
+        <div class="event-source">nps.gov/semo</div>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <span>The Pingry School</span>
+    <span class="mark">US History · 11 · Group C</span>
+  </footer>
+</div>
+
+<!-- ELECTORAL -->
+<div class="sheet electoral" id="sheet-electoral">
+  <div class="strategy-bar"></div>
+  <div class="meta">
+    <span>American Society &amp; Culture · Pingry</span>
+    <span class="doc-id">Doc. SG–02D · Lesson 2</span>
+  </div>
+  <div class="header-row">
+    <h1>Electoral<span class="period">.</span></h1>
+    <div class="yarn-info">
+      <div class="yarn-label">Your yarn</div>
+      <div class="yarn-name">Green</div>
+    </div>
+  </div>
+  <div class="definition">
+    Building Black political power through voter registration, party-building, and contested participation in democratic institutions — at enormous personal risk in places where registering to vote could get you killed.
+  </div>
+  <div class="digital-hint">
+    → Do the yarn activity digitally: <a href="interactive_yarn.html">Open the Digital Yarn Wall</a> and select Group D
+  </div>
+  <div class="task-box">
+    <div class="task-label">Your task</div>
+    <div class="task-text">For each event below, decide which image(s) on the wall represent the mechanism that event was targeting. Run green yarn from your event card to the image(s). On the index card attached to the yarn, write: the event, the year, the mechanism it targeted, and 1–2 sentences explaining the connection.</div>
+  </div>
+  <div class="events-label">Your events</div>
+  <div class="events">
+    <div class="event">
+      <div class="event-year">1962</div>
+      <div>
+        <div class="event-name">Council of Federated Organizations (COFO)</div>
+        <div class="event-desc">SNCC, CORE, NAACP, and SCLC form a coalition to coordinate voter registration in Mississippi, where Black voter registration was below 7%. Registrars use literacy tests, poll taxes, and economic retaliation; activists are threatened, beaten, killed.</div>
+        <div class="event-source">snccdigital.org · Mississippi</div>
+      </div>
+    </div>
+    <div class="event">
+      <div class="event-year">1964</div>
+      <div>
+        <div class="event-name">Mississippi Freedom Summer</div>
+        <div class="event-desc">SNCC and COFO bring 1,000 mostly white college student volunteers to Mississippi to register Black voters and run Freedom Schools. Three workers — James Chaney, Andrew Goodman, Michael Schwerner — are murdered by Klansmen in Neshoba County.</div>
+        <div class="event-source">snccdigital.org · Freedom Summer</div>
+      </div>
+    </div>
+    <div class="event">
+      <div class="event-year">1964</div>
+      <div>
+        <div class="event-name">Fannie Lou Hamer at the DNC</div>
+        <div class="event-desc">The Mississippi Freedom Democratic Party challenges the all-white official MS delegation at the Democratic Convention in Atlantic City. Hamer's televised testimony — describing the beating she received for trying to register — is so powerful that LBJ calls a press conference to keep her off the air.</div>
+        <div class="event-source">americanradioworks.publicradio.org · Hamer</div>
+      </div>
+    </div>
+    <div class="event">
+      <div class="event-year">1965</div>
+      <div>
+        <div class="event-name">Lowndes County Freedom Organization</div>
+        <div class="event-desc">In a county that was 80% Black with zero registered Black voters, SNCC's Stokely Carmichael helps organize an independent Black political party. The party's symbol — a black panther — is later adopted by the Black Panther Party for Self-Defense.</div>
+        <div class="event-source">snccdigital.org · LCFO</div>
+      </div>
+    </div>
+    <div class="event">
+      <div class="event-year">1965</div>
+      <div>
+        <div class="event-name">Voting Rights Act</div>
+        <div class="event-desc">Federal legislation banning literacy tests and authorizing federal oversight of voter registration in covered jurisdictions. Black voter registration in Mississippi rises from 7% in 1964 to 60% by 1968.</div>
+        <div class="event-source">archives.gov · Voting Rights Act</div>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <span>The Pingry School</span>
+    <span class="mark">US History · 11 · Group D</span>
+  </footer>
+</div>
+
+<!-- INSTITUTION-BUILDING -->
+<div class="sheet institution" id="sheet-institution">
+  <div class="strategy-bar"></div>
+  <div class="meta">
+    <span>American Society &amp; Culture · Pingry</span>
+    <span class="doc-id">Doc. SG–02E · Lesson 2</span>
+  </div>
+  <div class="header-row">
+    <h1>Institution<br>Building<span class="period">.</span></h1>
+    <div class="yarn-info">
+      <div class="yarn-label">Your yarn</div>
+      <div class="yarn-name">Purple</div>
+    </div>
+  </div>
+  <div class="definition">
+    Creating Black-led organizations, schools, and infrastructure that develop leaders and sustain the movement across decades. The patient, behind-the-scenes work that made every other strategy possible.
+  </div>
+  <div class="digital-hint">
+    → Do the yarn activity digitally: <a href="interactive_yarn.html">Open the Digital Yarn Wall</a> and select Group E
+  </div>
+  <div class="task-box">
+    <div class="task-label">Your task</div>
+    <div class="task-text">For each event below, decide which image(s) on the wall represent the mechanism that event was targeting. Run purple yarn from your event card to the image(s). On the index card attached to the yarn, write: the event, the year, the mechanism it targeted, and 1–2 sentences explaining the connection.</div>
+  </div>
+  <div class="events-label">Your events</div>
+  <div class="events">
+    <div class="event">
+      <div class="event-year">1932</div>
+      <div>
+        <div class="event-name">Highlander Folk School founded</div>
+        <div class="event-desc">Myles Horton founds Highlander in rural Tennessee as an integrated training center for labor organizers and, later, civil rights activists. Rosa Parks attended a workshop there four months before her arrest in Montgomery.</div>
+        <div class="event-source">highlandercenter.org</div>
+      </div>
+    </div>
+    <div class="event">
+      <div class="event-year">1957</div>
+      <div>
+        <div class="event-name">Citizenship Schools (Septima Clark)</div>
+        <div class="event-desc">Clark develops a model for teaching Black adults in the South to read and to pass voter literacy tests. By 1969, an estimated 700,000 Black voters had been registered through Citizenship School graduates.</div>
+        <div class="event-source">avery.cofc.edu · Septima Clark</div>
+      </div>
+    </div>
+    <div class="event">
+      <div class="event-year">1957</div>
+      <div>
+        <div class="event-name">SCLC founded</div>
+        <div class="event-desc">After the Montgomery Bus Boycott, ministers from across the South form the Southern Christian Leadership Conference. King is its first president. SCLC becomes one of the central organizational vehicles of the movement.</div>
+        <div class="event-source">kinginstitute.stanford.edu · SCLC</div>
+      </div>
+    </div>
+    <div class="event">
+      <div class="event-year">1960</div>
+      <div>
+        <div class="event-name">SNCC founded (Ella Baker)</div>
+        <div class="event-desc">After the Greensboro sit-ins, Ella Baker convenes student activists at Shaw University in Raleigh. SNCC is founded as a Black-youth-led organization. Baker insists on bottom-up democratic organizing rather than charismatic leadership.</div>
+        <div class="event-source">snccdigital.org · Ella Baker</div>
+      </div>
+    </div>
+    <div class="event">
+      <div class="event-year">1964</div>
+      <div>
+        <div class="event-name">Freedom Schools</div>
+        <div class="event-desc">During Freedom Summer, COFO operates 41 Freedom Schools across Mississippi serving 2,500 students. The curriculum included Black history, current events, and political organizing. Many former Freedom School students became movement leaders.</div>
+        <div class="event-source">snccdigital.org · Freedom Schools</div>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <span>The Pingry School</span>
+    <span class="mark">US History · 11 · Group E</span>
+  </footer>
+</div>
+
+<!-- ARMED SELF-DEFENSE -->
+<div class="sheet armed" id="sheet-armed">
+  <div class="strategy-bar"></div>
+  <div class="meta">
+    <span>American Society &amp; Culture · Pingry</span>
+    <span class="doc-id">Doc. SG–02F · Lesson 2</span>
+  </div>
+  <div class="header-row">
+    <h1>Armed<br>Self-Defense<span class="period">.</span></h1>
+    <div class="yarn-info">
+      <div class="yarn-label">Your yarn</div>
+      <div class="yarn-name">Orange</div>
+    </div>
+  </div>
+  <div class="definition">
+    Organized armed protection of Black communities, organizers, and homes against white terror. Distinct from offensive violence — rooted in the right to self-defense and often working alongside, not against, nonviolent organizers.
+  </div>
+  <div class="digital-hint">
+    → Do the yarn activity digitally: <a href="interactive_yarn.html">Open the Digital Yarn Wall</a> and select Group F
+  </div>
+  <div class="task-box">
+    <div class="task-label">Your task</div>
+    <div class="task-text">For each event below, decide which image(s) on the wall represent the mechanism that event was targeting. Run orange yarn from your event card to the image(s). On the index card attached to the yarn, write: the event, the year, the mechanism it targeted, and 1–2 sentences explaining the connection.</div>
+  </div>
+  <div class="events-label">Your events</div>
+  <div class="events">
+    <div class="event">
+      <div class="event-year">1957</div>
+      <div>
+        <div class="event-name">Robert F. Williams &amp; the Monroe NAACP</div>
+        <div class="event-desc">Williams, president of the Monroe, NC NAACP chapter, organizes Black veterans into an armed defense unit after repeated Klan attacks. When the Klan motorcades through the Black neighborhood in 1957, the unit returns fire. Klan night-riding in Monroe ends.</div>
+        <div class="event-source">historyisaweapon.com · Negroes With Guns</div>
+      </div>
+    </div>
+    <div class="event">
+      <div class="event-year">1962</div>
+      <div>
+        <div class="event-name">Negroes with Guns published</div>
+        <div class="event-desc">Williams publishes a book arguing that armed self-defense is compatible with — and sometimes necessary for — nonviolent civil rights organizing. The book influences a generation of activists, including Huey Newton and Bobby Seale.</div>
+        <div class="event-source">historyisaweapon.com · Negroes With Guns</div>
+      </div>
+    </div>
+    <div class="event">
+      <div class="event-year">1964</div>
+      <div>
+        <div class="event-name">Deacons for Defense and Justice founded</div>
+        <div class="event-desc">In Jonesboro, LA, Black men — many of them WWII and Korea veterans — organize an armed group to protect CORE workers, civil rights marches, and Black neighborhoods from Klan violence. Chapters spread across Louisiana and Mississippi.</div>
+        <div class="event-source">snccdigital.org · Deacons for Defense</div>
+      </div>
+    </div>
+    <div class="event">
+      <div class="event-year">1965</div>
+      <div>
+        <div class="event-name">Bogalusa, Louisiana</div>
+        <div class="event-desc">The Bogalusa Deacons protect CORE workers during a sustained civil rights campaign in a town where the Klan operated openly. After several armed standoffs, federal marshals are deployed. Bogalusa becomes one of the first major Southern victories under the new Civil Rights Act.</div>
+        <div class="event-source">snccdigital.org · Bogalusa</div>
+      </div>
+    </div>
+    <div class="event">
+      <div class="event-year">1965</div>
+      <div>
+        <div class="event-name">Mississippi Freedom Summer protection</div>
+        <div class="event-desc">Throughout Freedom Summer 1964 and after, local Black communities — often grandmothers and farmers — provided armed nighttime guard at the homes where SNCC and CORE workers slept. The nonviolent movement's survival in the rural South depended on this protection.</div>
+        <div class="event-source">Charles Cobb, This Nonviolent Stuff'll Get You Killed</div>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <span>The Pingry School</span>
+    <span class="mark">US History · 11 · Group F</span>
+  </footer>
+</div>
+
+<script>
+function showGroup(id, btn) {
+  document.querySelectorAll('.sheet').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.group-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('sheet-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// If arriving with a hash like #legal, show that group
+const hash = location.hash.replace('#','');
+if (hash) {
+  const sheet = document.getElementById('sheet-' + hash);
+  const tab = [...document.querySelectorAll('.group-tab')].find(t => t.getAttribute('onclick').includes("'" + hash + "'"));
+  if (sheet && tab) showGroup(hash, tab);
+}
+</script>
+</body>
+</html>

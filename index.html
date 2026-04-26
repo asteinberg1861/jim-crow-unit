@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jim Crow in America — Unit Materials</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400;1,9..144,900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1814;
+    --ink-soft: #5a564e;
+    --accent: #7a2f1f;
+    --paper: #ffffff;
+    --bg: #e8e3d9;
+    --south: #7a2f1f;
+    --north: #1e4d8f;
+    --legal: #b91c1c;
+    --economic: #1e4d8f;
+    --direct: #c89320;
+    --electoral: #2d6a3a;
+    --institution: #6b3f8f;
+    --armed: #c75a1f;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { background: var(--bg); }
+  body {
+    font-family: 'Fraunces', Georgia, serif;
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* ─── Hero ─── */
+  .hero {
+    background: var(--ink);
+    color: var(--bg);
+    padding: 4rem 2rem 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 6px;
+    background: var(--accent);
+  }
+  .hero-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 2rem;
+  }
+  .hero h1 {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144;
+    font-weight: 900;
+    font-size: clamp(42pt, 7vw, 72pt);
+    line-height: 0.9;
+    letter-spacing: -0.022em;
+  }
+  .hero h1 .period { color: #c4956a; }
+  .hero-sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9pt;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(232,227,217,0.6);
+    margin-top: 0.7rem;
+    font-weight: 500;
+  }
+  .hero-meta {
+    text-align: right;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8pt;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(232,227,217,0.45);
+    line-height: 1.8;
+  }
+  .hero-meta strong {
+    display: block;
+    color: rgba(232,227,217,0.75);
+    font-weight: 500;
+  }
+
+  /* ─── Flow guide ─── */
+  .flow-bar {
+    background: var(--accent);
+    padding: 0.7rem 2rem;
+  }
+  .flow-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7.8pt;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.85);
+    flex-wrap: wrap;
+  }
+  .flow-step {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: white;
+  }
+  .flow-step .step-num {
+    width: 18px; height: 18px;
+    border: 1.5px solid rgba(255,255,255,0.6);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 7pt;
+    flex-shrink: 0;
+  }
+  .flow-arrow {
+    color: rgba(255,255,255,0.4);
+    font-size: 10pt;
+  }
+
+  /* ─── Main content ─── */
+  .content {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 3rem 2rem 4rem;
+  }
+
+  /* ─── Lesson sections ─── */
+  .lesson {
+    margin-bottom: 3.5rem;
+  }
+  .lesson-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    border-bottom: 1.4px solid var(--ink);
+    padding-bottom: 0.7rem;
+    margin-bottom: 1.5rem;
+  }
+  .lesson-num {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144;
+    font-weight: 900;
+    font-style: italic;
+    font-size: 44pt;
+    line-height: 0.8;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+  .lesson-title {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 72;
+    font-weight: 600;
+    font-size: 22pt;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+  }
+  .lesson-title .lesson-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8.5pt;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    font-weight: 500;
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+
+  /* ─── Document cards ─── */
+  .docs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+  .doc-card {
+    border: 1px solid var(--ink);
+    background: var(--paper);
+    padding: 1.1rem 1.2rem 1rem;
+    text-decoration: none;
+    color: var(--ink);
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.15s ease, transform 0.15s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .doc-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: var(--card-color, var(--ink));
+    transition: height 0.15s ease;
+  }
+  .doc-card:hover {
+    box-shadow: 0 8px 28px rgba(30,20,10,0.14);
+    transform: translateY(-2px);
+  }
+  .doc-card:hover::before { height: 6px; }
+
+  .doc-id {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7.4pt;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--card-color, var(--accent));
+    font-weight: 600;
+    margin-top: 0.3rem;
+    margin-bottom: 0.5rem;
+  }
+  .doc-title {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 72;
+    font-weight: 600;
+    font-size: 14pt;
+    line-height: 1.15;
+    letter-spacing: -0.005em;
+    margin-bottom: 0.5rem;
+  }
+  .doc-desc {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 9.5pt;
+    line-height: 1.45;
+    color: var(--ink-soft);
+    flex: 1;
+    margin-bottom: 0.8rem;
+  }
+  .doc-type {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7.2pt;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .doc-type-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--card-color, var(--accent));
+    flex-shrink: 0;
+  }
+
+  /* Special card for yarn activity */
+  .doc-card.featured {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  .doc-card.featured .doc-badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8pt;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: white;
+    background: var(--card-color, var(--accent));
+    padding: 0.3rem 0.8rem;
+    font-weight: 600;
+  }
+
+  /* ─── Legend / how to use ─── */
+  .legend {
+    background: var(--paper);
+    border: 1px solid var(--ink);
+    padding: 1.5rem 1.8rem;
+    margin-top: 3rem;
+  }
+  .legend-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8.5pt;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+  .legend-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.8rem 1.5rem;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: 'Fraunces', serif;
+    font-size: 10pt;
+    line-height: 1.3;
+  }
+  .legend-swatch {
+    width: 20px; height: 4px;
+    flex-shrink: 0;
+    border-radius: 2px;
+  }
+
+  /* ─── Footer ─── */
+  footer {
+    background: var(--ink);
+    color: rgba(232,227,217,0.5);
+    padding: 1.5rem 2rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7.6pt;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  footer .mark { color: #c4956a; font-weight: 500; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div>
+      <h1>Jim Crow<br>in America<span class="period">.</span></h1>
+      <div class="hero-sub">Unit Materials · Two Lessons</div>
+    </div>
+    <div class="hero-meta">
+      <strong>The Pingry School</strong>
+      American Society &amp; Culture<br>
+      US History · 11
+    </div>
+  </div>
+</div>
+
+<div class="flow-bar">
+  <div class="flow-inner">
+    <div class="flow-step"><span class="step-num">1</span> Analyze images</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step"><span class="step-num">2</span> Identify mechanisms</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step"><span class="step-num">3</span> Map resistance strategies</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step"><span class="step-num">4</span> Connect events to images</div>
+    <span class="flow-arrow">→</span>
+    <div class="flow-step"><span class="step-num">5</span> Reflect &amp; exit</div>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- ─── Lesson 1 ─── -->
+  <div class="lesson">
+    <div class="lesson-header">
+      <div class="lesson-num">1</div>
+      <div>
+        <div class="lesson-title">
+          <span class="lesson-tag">Lesson One</span>
+          How Jim Crow Worked
+        </div>
+      </div>
+    </div>
+
+    <div class="docs-grid">
+
+      <a href="00_image_analysis_card.html" class="doc-card" style="--card-color: #7a2f1f;">
+        <div class="doc-id">Doc. IA–01</div>
+        <div class="doc-title">Image Analysis Card</div>
+        <div class="doc-desc">A four-part worksheet for analyzing each image on the wall — describe, gather facts, identify the mechanism, write an analysis.</div>
+        <div class="doc-type"><span class="doc-type-dot"></span> Student Worksheet · Fillable</div>
+      </a>
+
+      <a href="01_context_cards.html" class="doc-card" style="--card-color: #5a564e;">
+        <div class="doc-id">Doc. CX–01</div>
+        <div class="doc-title">Image Context Cards</div>
+        <div class="doc-desc">Verified facts for all ten images on the wall — photographer, date, location, and historical context. Color-coded South (brick) and North (blue).</div>
+        <div class="doc-type"><span class="doc-type-dot"></span> Reference · 10 Images</div>
+      </a>
+
+      <a href="02_mechanisms_reference.html" class="doc-card" style="--card-color: #7a2f1f;">
+        <div class="doc-id">Doc. RF–01</div>
+        <div class="doc-title">Mechanisms of Jim Crow</div>
+        <div class="doc-desc">Definitions and examples of the five interlocking mechanisms: legal segregation, economic control, violence, spatial separation, and daily life.</div>
+        <div class="doc-type"><span class="doc-type-dot"></span> Reference · Keep Open</div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- ─── Lesson 2 ─── -->
+  <div class="lesson">
+    <div class="lesson-header">
+      <div class="lesson-num">2</div>
+      <div>
+        <div class="lesson-title">
+          <span class="lesson-tag">Lesson Two</span>
+          Six Strategies of Resistance
+        </div>
+      </div>
+    </div>
+
+    <div class="docs-grid">
+
+      <a href="03_strategies_notetaking.html" class="doc-card" style="--card-color: #7a2f1f;">
+        <div class="doc-id">Doc. NT–02</div>
+        <div class="doc-title">Six Strategies Note-Taking</div>
+        <div class="doc-desc">A note-taking grid for all six resistance strategies — Legal, Economic, Direct Action, Electoral, Institution-Building, Armed Self-Defense.</div>
+        <div class="doc-type"><span class="doc-type-dot"></span> Student Worksheet · Fillable</div>
+      </a>
+
+      <a href="04_strategy_groups.html" class="doc-card" style="--card-color: #b91c1c;">
+        <div class="doc-id">Doc. SG–02A–F</div>
+        <div class="doc-title">Strategy Group Handouts</div>
+        <div class="doc-desc">Six group handouts — one per strategy, each with five key events. Groups identify which images their events connect to and explain the mechanism being targeted.</div>
+        <div class="doc-type"><span class="doc-type-dot"></span> Group Work · 6 Groups</div>
+      </a>
+
+      <a href="interactive_yarn.html" class="doc-card" style="--card-color: #1a1814;">
+        <div class="doc-id">Interactive</div>
+        <div class="doc-title">Digital Yarn Wall</div>
+        <div class="doc-desc">The yarn activity on screen — select your strategy group, then connect each event to the images that show the mechanism being targeted. Write your explanations.</div>
+        <div class="doc-type"><span class="doc-type-dot"></span> Interactive Activity</div>
+      </a>
+
+      <a href="05_yarn_cards.html" class="doc-card" style="--card-color: #5a564e;">
+        <div class="doc-id">Doc. YC–02</div>
+        <div class="doc-title">Yarn Connection Cards</div>
+        <div class="doc-desc">Index cards to attach to the yarn — each records the event, year, mechanism targeted, and written explanation of the connection.</div>
+        <div class="doc-type"><span class="doc-type-dot"></span> Activity Cards · Cut Apart</div>
+      </a>
+
+      <a href="06_reflection.html" class="doc-card" style="--card-color: #7a2f1f;">
+        <div class="doc-id">Doc. RX–02</div>
+        <div class="doc-title">Reflection: After the Wall</div>
+        <div class="doc-desc">Two questions — first as a witness (which image is sitting with you?), then as an analyst (mechanism and strategies for that same image).</div>
+        <div class="doc-type"><span class="doc-type-dot"></span> Student Worksheet · Fillable</div>
+      </a>
+
+      <a href="07_exit_ticket.html" class="doc-card" style="--card-color: #7a2f1f;">
+        <div class="doc-id">Doc. ET–02</div>
+        <div class="doc-title">Exit Ticket</div>
+        <div class="doc-desc">Name one mechanism of Jim Crow that may still operate today in altered form. Cite a specific, locatable instance with evidence.</div>
+        <div class="doc-type"><span class="doc-type-dot"></span> Student Worksheet · Fillable</div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- ─── Legend ─── -->
+  <div class="legend">
+    <div class="legend-title">Strategy Color Key</div>
+    <div class="legend-grid">
+      <div class="legend-item"><div class="legend-swatch" style="background: #b91c1c;"></div> Legal (Group A · Red)</div>
+      <div class="legend-item"><div class="legend-swatch" style="background: #1e4d8f;"></div> Economic (Group B · Blue)</div>
+      <div class="legend-item"><div class="legend-swatch" style="background: #c89320;"></div> Direct Action (Group C · Yellow)</div>
+      <div class="legend-item"><div class="legend-swatch" style="background: #2d6a3a;"></div> Electoral (Group D · Green)</div>
+      <div class="legend-item"><div class="legend-swatch" style="background: #6b3f8f;"></div> Institution-Building (Group E · Purple)</div>
+      <div class="legend-item"><div class="legend-swatch" style="background: #c75a1f;"></div> Armed Self-Defense (Group F · Orange)</div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <span>The Pingry School · American Society &amp; Culture</span>
+  <span class="mark">US History · 11</span>
+</footer>
+
+</body>
+</html>

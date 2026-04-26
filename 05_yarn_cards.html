@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Yarn Connection Cards</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1814;
+    --ink-soft: #5a564e;
+    --accent: #7a2f1f;
+    --paper: #ffffff;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #e8e3d9; color: var(--ink); }
+  body {
+    font-family: 'Fraunces', Georgia, serif;
+    padding-top: calc(42px + 2rem);
+    padding-bottom: 2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  /* ─── Nav ─── */
+  .jc-nav {
+    position: fixed; top: 0; left: 0; right: 0; height: 42px; z-index: 100;
+    background: var(--ink);
+    display: flex; align-items: center; padding: 0 1.2rem; gap: 1.5rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7.8pt; letter-spacing: 0.14em; text-transform: uppercase;
+  }
+  .jc-nav a { color: rgba(232,227,217,0.65); text-decoration: none; transition: color 0.1s; }
+  .jc-nav a:hover { color: #e8e3d9; }
+  .jc-nav-brand { color: #c4956a !important; font-weight: 600; }
+  .jc-nav-links { display: flex; gap: 1.4rem; margin-left: auto; }
+  .jc-nav-print {
+    background: none; border: 1px solid rgba(232,227,217,0.25); cursor: pointer;
+    color: rgba(232,227,217,0.65); padding: 0.2rem 0.7rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7.4pt; letter-spacing: 0.14em; text-transform: uppercase;
+  }
+  .jc-nav-print:hover { color: #e8e3d9; border-color: rgba(232,227,217,0.5); }
+
+  /* Digital alt banner */
+  .digital-banner {
+    width: 8.5in; margin: 0 auto 1rem;
+    background: #1a1814; color: #e8e3d9;
+    padding: 0.7rem 1rem;
+    display: flex; align-items: center; gap: 1rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8pt; letter-spacing: 0.12em; text-transform: uppercase;
+  }
+  .digital-banner a {
+    color: #c4956a; font-weight: 600; text-decoration: none;
+    border-bottom: 1px solid rgba(196,149,106,0.4);
+  }
+  .digital-banner a:hover { border-bottom-color: #c4956a; }
+  @media print { .digital-banner { display: none; } }
+
+  .save-bar {
+    position: fixed; bottom: 1rem; right: 1.2rem; z-index: 50;
+    font-family: 'IBM Plex Mono', monospace; font-size: 7.6pt;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent); background: white;
+    padding: 0.3rem 0.8rem; border: 1px solid var(--accent);
+    opacity: 0; transition: opacity 0.3s; pointer-events: none;
+  }
+  .save-bar.show { opacity: 1; }
+
+  .sheet {
+    width: 8.5in;
+    min-height: 11in;
+    background: var(--paper);
+    margin: 0 auto;
+    padding: 0.4in;
+    box-shadow: 0 24px 70px rgba(30, 20, 10, 0.18);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto repeat(4, 1fr);
+    gap: 0.2in;
+  }
+
+  .header-strip {
+    grid-column: 1 / -1;
+    border-bottom: 1.4px solid var(--ink);
+    padding-bottom: 0.14in;
+    margin-bottom: -0.05in;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .header-strip h1 {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144;
+    font-weight: 900; font-size: 22pt;
+    line-height: 1; letter-spacing: -0.018em;
+  }
+
+  .header-strip .doc-id {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8.2pt; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--accent);
+    font-weight: 500;
+  }
+
+  .card {
+    border: 1px solid var(--ink);
+    padding: 0.16in 0.18in 0.14in;
+    display: flex;
+    flex-direction: column;
+    gap: 0.05in;
+  }
+
+  .card-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7.2pt;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    font-weight: 500;
+    margin-bottom: 0.02in;
+  }
+
+  .field {
+    display: flex;
+    align-items: center;
+    gap: 0.08in;
+  }
+
+  .field-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7.6pt;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink);
+    font-weight: 500;
+    width: 0.74in;
+    flex-shrink: 0;
+  }
+
+  input.field-input {
+    flex: 1; border: none; border-bottom: 1px solid var(--ink);
+    height: 0.18in; background: transparent; outline: none;
+    font-family: 'Fraunces', Georgia, serif; font-size: 9.5pt;
+    color: var(--ink); padding: 0 2px;
+  }
+  input.field-input:focus { background: rgba(122,47,31,0.03); }
+
+  .why-section {
+    margin-top: 0.04in;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .why-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7.6pt;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink);
+    font-weight: 500;
+    margin-bottom: 0.03in;
+  }
+
+  textarea.why-input {
+    flex: 1; border: none; border-bottom: 1px solid var(--ink);
+    background: transparent; outline: none; resize: none;
+    font-family: 'Fraunces', Georgia, serif; font-size: 9.5pt;
+    line-height: 1.5; color: var(--ink); padding: 2px;
+    min-height: 0.4in;
+  }
+  textarea.why-input:focus { background: rgba(122,47,31,0.03); }
+
+  @media print {
+    .jc-nav, .save-bar { display: none !important; }
+    html, body { background: #fff; padding: 0; margin: 0; }
+    body { padding-top: 0 !important; }
+    .sheet { box-shadow: none; }
+    @page { size: letter; margin: 0; }
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav class="jc-nav">
+  <a href="index.html" class="jc-nav-brand">Jim Crow in America</a>
+  <div class="jc-nav-links">
+    <a href="04_strategy_groups.html">Strategy Groups</a>
+    <a href="interactive_yarn.html">Digital Yarn Wall</a>
+    <a href="06_reflection.html">Reflection</a>
+  </div>
+  <button class="jc-nav-print" onclick="window.print()">Print</button>
+</nav>
+
+<div class="save-bar" id="saveBar">Saved</div>
+
+<div class="digital-banner">
+  Prefer digital? <a href="interactive_yarn.html">Use the Digital Yarn Wall</a> — it saves your connections automatically.
+</div>
+
+<div class="sheet">
+  <div class="header-strip">
+    <h1>Yarn Connection Cards</h1>
+    <span class="doc-id">Doc. YC–02 · Lesson 2 · Cut Apart</span>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Connection</div>
+    <div class="field"><span class="field-label">Event</span><input type="text" class="field-input" id="c1-event" autocomplete="off"></div>
+    <div class="field"><span class="field-label">Year</span><input type="text" class="field-input" id="c1-year" autocomplete="off"></div>
+    <div class="field"><span class="field-label">Mechanism</span><input type="text" class="field-input" id="c1-mech" autocomplete="off"></div>
+    <div class="why-section">
+      <div class="why-label">Why this connection</div>
+      <textarea class="why-input" id="c1-why" rows="2"></textarea>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Connection</div>
+    <div class="field"><span class="field-label">Event</span><input type="text" class="field-input" id="c2-event" autocomplete="off"></div>
+    <div class="field"><span class="field-label">Year</span><input type="text" class="field-input" id="c2-year" autocomplete="off"></div>
+    <div class="field"><span class="field-label">Mechanism</span><input type="text" class="field-input" id="c2-mech" autocomplete="off"></div>
+    <div class="why-section">
+      <div class="why-label">Why this connection</div>
+      <textarea class="why-input" id="c2-why" rows="2"></textarea>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Connection</div>
+    <div class="field"><span class="field-label">Event</span><input type="text" class="field-input" id="c3-event" autocomplete="off"></div>
+    <div class="field"><span class="field-label">Year</span><input type="text" class="field-input" id="c3-year" autocomplete="off"></div>
+    <div class="field"><span class="field-label">Mechanism</span><input type="text" class="field-input" id="c3-mech" autocomplete="off"></div>
+    <div class="why-section">
+      <div class="why-label">Why this connection</div>
+      <textarea class="why-input" id="c3-why" rows="2"></textarea>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Connection</div>
+    <div class="field"><span class="field-label">Event</span><input type="text" class="field-input" id="c4-event" autocomplete="off"></div>
+    <div class="field"><span class="field-label">Year</span><input type="text" class="field-input" id="c4-year" autocomplete="off"></div>
+    <div class="field"><span class="field-label">Mechanism</span><input type="text" class="field-input" id="c4-mech" autocomplete="off"></div>
+    <div class="why-section">
+      <div class="why-label">Why this connection</div>
+      <textarea class="why-input" id="c4-why" rows="2"></textarea>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Connection</div>
+    <div class="field"><span class="field-label">Event</span><input type="text" class="field-input" id="c5-event" autocomplete="off"></div>
+    <div class="field"><span class="field-label">Year</span><input type="text" class="field-input" id="c5-year" autocomplete="off"></div>
+    <div class="field"><span class="field-label">Mechanism</span><input type="text" class="field-input" id="c5-mech" autocomplete="off"></div>
+    <div class="why-section">
+      <div class="why-label">Why this connection</div>
+      <textarea class="why-input" id="c5-why" rows="2"></textarea>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Connection</div>
+    <div class="field"><span class="field-label">Event</span><input type="text" class="field-input" id="c6-event" autocomplete="off"></div>
+    <div class="field"><span class="field-label">Year</span><input type="text" class="field-input" id="c6-year" autocomplete="off"></div>
+    <div class="field"><span class="field-label">Mechanism</span><input type="text" class="field-input" id="c6-mech" autocomplete="off"></div>
+    <div class="why-section">
+      <div class="why-label">Why this connection</div>
+      <textarea class="why-input" id="c6-why" rows="2"></textarea>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Connection</div>
+    <div class="field"><span class="field-label">Event</span><input type="text" class="field-input" id="c7-event" autocomplete="off"></div>
+    <div class="field"><span class="field-label">Year</span><input type="text" class="field-input" id="c7-year" autocomplete="off"></div>
+    <div class="field"><span class="field-label">Mechanism</span><input type="text" class="field-input" id="c7-mech" autocomplete="off"></div>
+    <div class="why-section">
+      <div class="why-label">Why this connection</div>
+      <textarea class="why-input" id="c7-why" rows="2"></textarea>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Connection</div>
+    <div class="field"><span class="field-label">Event</span><input type="text" class="field-input" id="c8-event" autocomplete="off"></div>
+    <div class="field"><span class="field-label">Year</span><input type="text" class="field-input" id="c8-year" autocomplete="off"></div>
+    <div class="field"><span class="field-label">Mechanism</span><input type="text" class="field-input" id="c8-mech" autocomplete="off"></div>
+    <div class="why-section">
+      <div class="why-label">Why this connection</div>
+      <textarea class="why-input" id="c8-why" rows="2"></textarea>
+    </div>
+  </div>
+</div>
+
+<script>
+const PAGE_KEY = 'jc-yc02';
+const IDS = [];
+for (let i = 1; i <= 8; i++) ['event','year','mech','why'].forEach(f => IDS.push(`c${i}-${f}`));
+
+function load() {
+  try {
+    const data = JSON.parse(localStorage.getItem(PAGE_KEY) || '{}');
+    IDS.forEach(id => { const el = document.getElementById(id); if (el && data[id]) el.value = data[id]; });
+  } catch(e) {}
+}
+
+function save() {
+  try {
+    const data = {};
+    IDS.forEach(id => { const el = document.getElementById(id); if (el) data[id] = el.value; });
+    localStorage.setItem(PAGE_KEY, JSON.stringify(data));
+    const bar = document.getElementById('saveBar');
+    bar.classList.add('show');
+    clearTimeout(bar._t);
+    bar._t = setTimeout(() => bar.classList.remove('show'), 1600);
+  } catch(e) {}
+}
+
+load();
+document.querySelectorAll('input, textarea').forEach(el => el.addEventListener('input', save));
+</script>
+</body>
+</html>

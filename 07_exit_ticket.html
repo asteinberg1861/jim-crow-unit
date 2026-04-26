@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Exit Ticket — Lesson 2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1814;
+    --ink-soft: #5a564e;
+    --accent: #7a2f1f;
+    --paper: #ffffff;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #e8e3d9; color: var(--ink); }
+  body {
+    font-family: 'Fraunces', Georgia, serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: calc(42px + 2.5rem);
+    padding-bottom: 2.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    min-height: 100vh;
+  }
+
+  /* ─── Nav ─── */
+  .jc-nav {
+    position: fixed; top: 0; left: 0; right: 0; height: 42px; z-index: 100;
+    background: var(--ink);
+    display: flex; align-items: center; padding: 0 1.2rem; gap: 1.5rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7.8pt; letter-spacing: 0.14em; text-transform: uppercase;
+  }
+  .jc-nav a { color: rgba(232,227,217,0.65); text-decoration: none; transition: color 0.1s; }
+  .jc-nav a:hover { color: #e8e3d9; }
+  .jc-nav-brand { color: #c4956a !important; font-weight: 600; }
+  .jc-nav-links { display: flex; gap: 1.4rem; margin-left: auto; }
+  .jc-nav-print {
+    background: none; border: 1px solid rgba(232,227,217,0.25); cursor: pointer;
+    color: rgba(232,227,217,0.65); padding: 0.2rem 0.7rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7.4pt; letter-spacing: 0.14em; text-transform: uppercase;
+  }
+  .jc-nav-print:hover { color: #e8e3d9; border-color: rgba(232,227,217,0.5); }
+
+  .save-bar {
+    position: fixed; bottom: 1rem; right: 1.2rem; z-index: 50;
+    font-family: 'IBM Plex Mono', monospace; font-size: 7.6pt;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent); background: white;
+    padding: 0.3rem 0.8rem; border: 1px solid var(--accent);
+    opacity: 0; transition: opacity 0.3s; pointer-events: none;
+  }
+  .save-bar.show { opacity: 1; }
+
+  .sheet {
+    width: 8.5in;
+    min-height: 11in;
+    background: var(--paper);
+    padding: 0.55in 0.6in 0.45in;
+    box-shadow: 0 24px 70px rgba(30, 20, 10, 0.18);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  .tick {
+    position: absolute; width: 0.18in; height: 0.18in;
+    border-color: var(--ink); border-style: solid; border-width: 0;
+  }
+  .tick.tl { top: 0.2in; left: 0.2in; border-top-width: 1px; border-left-width: 1px; }
+  .tick.tr { top: 0.2in; right: 0.2in; border-top-width: 1px; border-right-width: 1px; }
+  .tick.bl { bottom: 0.2in; left: 0.2in; border-bottom-width: 1px; border-left-width: 1px; }
+  .tick.br { bottom: 0.2in; right: 0.2in; border-bottom-width: 1px; border-right-width: 1px; }
+
+  .header { border-bottom: 1.4px solid var(--ink); padding-bottom: 0.18in; margin-bottom: 0.24in; }
+  .meta {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8.2pt; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--ink-soft);
+    margin-bottom: 0.2in;
+  }
+  .meta .doc-id { color: var(--accent); font-weight: 500; }
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144;
+    font-weight: 900; font-size: 36pt;
+    line-height: 0.94; letter-spacing: -0.022em;
+  }
+  h1 .period { color: var(--accent); }
+  .subtitle {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10pt; letter-spacing: 0.28em;
+    text-transform: uppercase; color: var(--accent);
+    margin-top: 0.08in; font-weight: 500;
+  }
+  .name-row {
+    display: flex; align-items: center; gap: 0.14in; margin-top: 0.16in;
+  }
+  .name-row .label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9pt; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--ink-soft);
+    font-weight: 500; flex-shrink: 0;
+  }
+  input.name-input {
+    flex: 1; border: none; border-bottom: 1px solid var(--ink);
+    height: 0.26in; background: transparent; outline: none;
+    font-family: 'Fraunces', Georgia, serif; font-size: 12pt; color: var(--ink);
+    padding: 0 4px;
+  }
+  input.name-input:focus { background: #faf8f4; }
+
+  .frame {
+    font-family: 'Fraunces', serif;
+    font-style: italic; font-size: 11pt; line-height: 1.5;
+    color: var(--ink); margin-bottom: 0.24in;
+    padding-left: 0.18in; border-left: 2px solid var(--accent);
+  }
+
+  .options-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.18in;
+    margin-bottom: 0.22in;
+  }
+
+  .option {
+    border: 1px solid var(--ink);
+    padding: 0.16in 0.18in 0.14in;
+  }
+
+  .option-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8pt; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--accent);
+    font-weight: 600; margin-bottom: 0.06in;
+  }
+
+  .option-title {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 72;
+    font-weight: 600; font-size: 13pt;
+    line-height: 1.18; margin-bottom: 0.08in;
+  }
+
+  .option-text {
+    font-family: 'Fraunces', serif;
+    font-size: 10pt; line-height: 1.42;
+    color: var(--ink); margin-bottom: 0.1in;
+  }
+
+  .candidates { display: flex; flex-direction: column; gap: 0.04in; }
+
+  .candidate {
+    display: flex; align-items: baseline; gap: 0.08in;
+    font-family: 'Fraunces', serif; font-size: 9.5pt; line-height: 1.3;
+    cursor: pointer;
+  }
+
+  /* Interactive candidate selection */
+  .candidate input[type="radio"] {
+    width: 0.1in; height: 0.1in;
+    accent-color: var(--accent);
+    flex-shrink: 0; margin-top: 0.05in;
+    cursor: pointer;
+  }
+  /* Keep the bullet style for print fallback */
+  .candidate .bullet {
+    width: 0.06in; height: 0.06in;
+    background: var(--accent); border-radius: 50%;
+    flex-shrink: 0; margin-top: 0.07in;
+    display: none; /* hidden when radio is visible */
+  }
+  @media print {
+    .candidate input[type="radio"] { display: none; }
+    .candidate .bullet { display: block; }
+  }
+
+  .response-block { margin-top: 0.06in; }
+
+  .response-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9pt; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--ink-soft);
+    margin-bottom: 0.08in; font-weight: 500;
+  }
+
+  .field {
+    display: flex; align-items: center;
+    gap: 0.12in; margin-bottom: 0.04in;
+  }
+
+  .field-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8.4pt; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--ink);
+    font-weight: 500; width: 1.7in; flex-shrink: 0;
+  }
+
+  input.field-input {
+    flex: 1; border: none; border-bottom: 1px solid var(--ink);
+    height: 0.3in; background: transparent; outline: none;
+    font-family: 'Fraunces', Georgia, serif; font-size: 11pt;
+    color: var(--ink); padding: 0 4px;
+  }
+  input.field-input:focus { background: rgba(122,47,31,0.03); }
+
+  textarea.response-area {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid var(--ink);
+    background: transparent;
+    outline: none;
+    resize: none;
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 11pt;
+    line-height: 0.32in;
+    color: var(--ink);
+    padding: 2px 4px;
+    background-image: repeating-linear-gradient(
+      to bottom,
+      transparent,
+      transparent calc(0.32in - 1px),
+      rgba(26,24,20,0.12) calc(0.32in - 1px),
+      rgba(26,24,20,0.12) 0.32in
+    );
+    background-attachment: local;
+  }
+  textarea.response-area:focus {
+    background-color: rgba(122,47,31,0.02);
+    background-image: repeating-linear-gradient(
+      to bottom,
+      transparent,
+      transparent calc(0.32in - 1px),
+      rgba(26,24,20,0.12) calc(0.32in - 1px),
+      rgba(26,24,20,0.12) 0.32in
+    );
+  }
+
+  .closing {
+    font-family: 'Fraunces', serif;
+    font-style: italic; font-size: 10pt; line-height: 1.4;
+    color: var(--ink-soft); margin-top: 0.18in;
+    padding-top: 0.14in;
+    border-top: 0.5px dashed var(--ink-soft);
+  }
+
+  footer {
+    margin-top: auto; padding-top: 0.18in;
+    border-top: 0.5px solid var(--ink);
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7.6pt; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--ink-soft);
+  }
+  footer .mark { color: var(--accent); font-weight: 500; }
+
+  @media print {
+    .jc-nav, .save-bar { display: none !important; }
+    html, body { background: #fff; padding: 0; margin: 0; }
+    body { display: block; }
+    .sheet { box-shadow: none; width: 100%; min-height: auto; }
+    textarea.response-area { background-image: none; border-bottom: 1px solid var(--ink); }
+    @page { size: letter; margin: 0; }
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav class="jc-nav">
+  <a href="index.html" class="jc-nav-brand">Jim Crow in America</a>
+  <div class="jc-nav-links">
+    <a href="02_mechanisms_reference.html">Mechanisms</a>
+    <a href="06_reflection.html">Reflection</a>
+    <a href="index.html">All Materials</a>
+  </div>
+  <button class="jc-nav-print" onclick="window.print()">Print</button>
+</nav>
+
+<div class="save-bar" id="saveBar">Saved</div>
+
+<div class="sheet">
+  <div class="tick tl"></div><div class="tick tr"></div>
+  <div class="tick bl"></div><div class="tick br"></div>
+
+  <header class="header">
+    <div class="meta">
+      <span>American Society &amp; Culture · Pingry</span>
+      <span class="doc-id">Doc. ET–02 · Lesson 2</span>
+    </div>
+    <h1>Exit Ticket<span class="period">.</span></h1>
+    <div class="subtitle">Naming What Still Operates</div>
+    <div class="name-row">
+      <span class="label">Name</span>
+      <input type="text" class="name-input" id="field-name" placeholder=" " autocomplete="off">
+    </div>
+  </header>
+
+  <div class="frame">
+    Some mechanisms of Jim Crow were dismantled. Some were altered and continue to operate. Name one mechanism that may still operate today, in altered form. Cite a specific, locatable instance — your county, your state, a documented case. The mechanism in your zip code is harder to see than the one in the news cycle. Press for that one.
+  </div>
+
+  <div class="options-row">
+    <div class="option">
+      <div class="option-label">Option A</div>
+      <div class="option-title">Choose from the list</div>
+      <div class="option-text">Mechanisms historians and journalists have documented as still operating, in altered form:</div>
+      <div class="candidates">
+        <label class="candidate"><input type="radio" name="option" value="School district boundary lines"><span>School district boundary lines</span></label>
+        <label class="candidate"><input type="radio" name="option" value="Mortgage lending discrimination"><span>Mortgage lending discrimination</span></label>
+        <label class="candidate"><input type="radio" name="option" value="Restrictive covenants in property deeds"><span>Restrictive covenants in property deeds</span></label>
+        <label class="candidate"><input type="radio" name="option" value="Employment background-check practices"><span>Employment background-check practices</span></label>
+        <label class="candidate"><input type="radio" name="option" value="Cash bail systems"><span>Cash bail systems</span></label>
+        <label class="candidate"><input type="radio" name="option" value="Voter ID and registration access"><span>Voter ID and registration access</span></label>
+      </div>
+    </div>
+
+    <div class="option">
+      <div class="option-label">Option B</div>
+      <div class="option-title">Propose your own</div>
+      <div class="option-text">A mechanism not on this list. Same evidentiary requirement: specific, locatable, with evidence you can name.</div>
+      <div class="option-text" style="margin-top: 0.1in; font-style: italic; color: var(--ink-soft);">
+        Push past what is salient in the news cycle. Look for what has been made invisible — the mechanism in a deed, a district line, a hiring policy. The local is where this reaches you.
+      </div>
+      <div style="margin-top: 0.1in;">
+        <input type="text" class="field-input" id="field-own-mechanism" placeholder="Your mechanism…" style="width:100%;" autocomplete="off">
+      </div>
+    </div>
+  </div>
+
+  <div class="response-block">
+    <div class="response-label">Your response</div>
+
+    <div class="field">
+      <span class="field-label">Mechanism named</span>
+      <input type="text" class="field-input" id="field-mechanism" placeholder=" " autocomplete="off">
+    </div>
+
+    <div class="field">
+      <span class="field-label">Specific instance</span>
+      <input type="text" class="field-input" id="field-instance" placeholder=" " autocomplete="off">
+    </div>
+
+    <div class="field">
+      <span class="field-label">Where (location)</span>
+      <input type="text" class="field-input" id="field-location" placeholder=" " autocomplete="off">
+    </div>
+
+    <div style="margin-top: 0.14in;">
+      <div class="response-label" style="margin-bottom: 0.06in;">What evidence makes you confident this is operating?</div>
+      <textarea class="response-area" id="field-evidence" rows="4" placeholder=" "></textarea>
+    </div>
+  </div>
+
+  <footer>
+    <span>The Pingry School</span>
+    <span class="mark">US History · 11</span>
+  </footer>
+</div>
+
+<script>
+const PAGE_KEY = 'jc-et02';
+const TEXT_FIELDS = ['name', 'own-mechanism', 'mechanism', 'instance', 'location', 'evidence'];
+
+function load() {
+  try {
+    const data = JSON.parse(localStorage.getItem(PAGE_KEY) || '{}');
+    TEXT_FIELDS.forEach(f => {
+      const el = document.getElementById('field-' + f);
+      if (el && data[f]) el.value = data[f];
+    });
+    if (data['option-a']) {
+      const radios = document.querySelectorAll('input[name="option"]');
+      radios.forEach(r => { if (r.value === data['option-a']) r.checked = true; });
+    }
+  } catch(e) {}
+}
+
+function save() {
+  try {
+    const data = {};
+    TEXT_FIELDS.forEach(f => {
+      const el = document.getElementById('field-' + f);
+      if (el) data[f] = el.value;
+    });
+    const checked = document.querySelector('input[name="option"]:checked');
+    if (checked) data['option-a'] = checked.value;
+    localStorage.setItem(PAGE_KEY, JSON.stringify(data));
+    const bar = document.getElementById('saveBar');
+    bar.classList.add('show');
+    clearTimeout(bar._t);
+    bar._t = setTimeout(() => bar.classList.remove('show'), 1600);
+  } catch(e) {}
+}
+
+// Auto-fill mechanism field when a radio is selected
+document.querySelectorAll('input[name="option"]').forEach(r => {
+  r.addEventListener('change', () => {
+    document.getElementById('field-mechanism').value = r.value;
+    save();
+  });
+});
+
+load();
+document.querySelectorAll('input[type="text"], textarea').forEach(el => el.addEventListener('input', save));
+</script>
+</body>
+</html>

@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Mechanisms of Jim Crow — Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1814;
+    --ink-soft: #5a564e;
+    --accent: #7a2f1f;
+    --paper: #ffffff;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #e8e3d9; color: var(--ink); }
+  body {
+    font-family: 'Fraunces', Georgia, serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: calc(42px + 2.5rem);
+    padding-bottom: 2.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    min-height: 100vh;
+  }
+
+  /* ─── Nav ─── */
+  .jc-nav {
+    position: fixed; top: 0; left: 0; right: 0; height: 42px; z-index: 100;
+    background: var(--ink);
+    display: flex; align-items: center; padding: 0 1.2rem; gap: 1.5rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7.8pt; letter-spacing: 0.14em; text-transform: uppercase;
+  }
+  .jc-nav a { color: rgba(232,227,217,0.65); text-decoration: none; transition: color 0.1s; }
+  .jc-nav a:hover { color: #e8e3d9; }
+  .jc-nav-brand { color: #c4956a !important; font-weight: 600; }
+  .jc-nav-links { display: flex; gap: 1.4rem; margin-left: auto; }
+  .jc-nav-print {
+    background: none; border: 1px solid rgba(232,227,217,0.25); cursor: pointer;
+    color: rgba(232,227,217,0.65); padding: 0.2rem 0.7rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7.4pt; letter-spacing: 0.14em; text-transform: uppercase;
+  }
+  .jc-nav-print:hover { color: #e8e3d9; border-color: rgba(232,227,217,0.5); }
+
+  .sheet {
+    width: 8.5in;
+    min-height: 11in;
+    background: var(--paper);
+    padding: 0.55in 0.6in 0.45in;
+    box-shadow: 0 24px 70px rgba(30, 20, 10, 0.18);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  .tick {
+    position: absolute; width: 0.18in; height: 0.18in;
+    border-color: var(--ink); border-style: solid; border-width: 0;
+  }
+  .tick.tl { top: 0.2in; left: 0.2in; border-top-width: 1px; border-left-width: 1px; }
+  .tick.tr { top: 0.2in; right: 0.2in; border-top-width: 1px; border-right-width: 1px; }
+  .tick.bl { bottom: 0.2in; left: 0.2in; border-bottom-width: 1px; border-left-width: 1px; }
+  .tick.br { bottom: 0.2in; right: 0.2in; border-bottom-width: 1px; border-right-width: 1px; }
+
+  .header { border-bottom: 1.4px solid var(--ink); padding-bottom: 0.2in; margin-bottom: 0.3in; }
+  .meta {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8.2pt; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--ink-soft);
+    margin-bottom: 0.22in;
+  }
+  .meta .doc-id { color: var(--accent); font-weight: 500; }
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144;
+    font-weight: 900; font-size: 38pt;
+    line-height: 0.94; letter-spacing: -0.022em;
+  }
+  h1 .period { color: var(--accent); }
+  .subtitle {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10pt; letter-spacing: 0.28em;
+    text-transform: uppercase; color: var(--accent);
+    margin-top: 0.1in; font-weight: 500;
+  }
+
+  .intro {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 11pt;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    margin-bottom: 0.3in;
+    padding-left: 0.18in;
+    border-left: 2px solid var(--accent);
+  }
+
+  .mechanisms {
+    display: flex;
+    flex-direction: column;
+    gap: 0.22in;
+  }
+
+  .mech {
+    display: grid;
+    grid-template-columns: 0.55in 1fr;
+    gap: 0.16in;
+    align-items: start;
+    padding-bottom: 0.2in;
+    border-bottom: 0.5px solid rgba(26,24,20,0.12);
+  }
+  .mech:last-child { border-bottom: none; padding-bottom: 0; }
+
+  .mech-num {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144;
+    font-weight: 900;
+    font-style: italic;
+    font-size: 32pt;
+    line-height: 0.85;
+    color: var(--accent);
+  }
+
+  .mech-name {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10pt;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink);
+    font-weight: 600;
+    margin-bottom: 0.06in;
+  }
+
+  .mech-def {
+    font-family: 'Fraunces', serif;
+    font-size: 10.5pt;
+    line-height: 1.4;
+    color: var(--ink);
+    margin-bottom: 0.06in;
+  }
+
+  .mech-examples {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 9.5pt;
+    line-height: 1.4;
+    color: var(--ink-soft);
+  }
+
+  .mech-examples strong {
+    font-style: normal;
+    font-weight: 500;
+    color: var(--accent);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8.5pt;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* Quick-link strip at bottom of each mechanism */
+  .mech-link {
+    margin-top: 0.06in;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7.4pt; letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .mech-link a {
+    color: var(--accent); text-decoration: none;
+    border-bottom: 1px solid rgba(122,47,31,0.3);
+  }
+  .mech-link a:hover { border-bottom-color: var(--accent); }
+
+  footer {
+    margin-top: auto; padding-top: 0.18in;
+    border-top: 0.5px solid var(--ink);
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7.6pt; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--ink-soft);
+  }
+  footer .mark { color: var(--accent); font-weight: 500; }
+
+  @media print {
+    .jc-nav { display: none !important; }
+    html, body { background: #fff; padding: 0; margin: 0; }
+    body { display: block; }
+    .sheet { box-shadow: none; width: 100%; min-height: auto; }
+    .mech-link { display: none; }
+    @page { size: letter; margin: 0; }
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav class="jc-nav">
+  <a href="index.html" class="jc-nav-brand">Jim Crow in America</a>
+  <div class="jc-nav-links">
+    <a href="00_image_analysis_card.html">Analysis Card</a>
+    <a href="01_context_cards.html">Context Cards</a>
+    <a href="interactive_yarn.html">Yarn Wall</a>
+  </div>
+  <button class="jc-nav-print" onclick="window.print()">Print</button>
+</nav>
+
+<div class="sheet">
+  <div class="tick tl"></div><div class="tick tr"></div>
+  <div class="tick bl"></div><div class="tick br"></div>
+
+  <header class="header">
+    <div class="meta">
+      <span>American Society &amp; Culture · Pingry</span>
+      <span class="doc-id">Doc. RF–01 · Lesson 1</span>
+    </div>
+    <h1>Mechanisms<br>of Jim Crow<span class="period">.</span></h1>
+    <div class="subtitle">Reference</div>
+  </header>
+
+  <div class="intro">
+    Jim Crow operated through interlocking mechanisms — not one tool, but five working together. Most images show more than one. Your work is to identify which one is <em>primary</em> in the image you are analyzing, and to defend why.
+  </div>
+
+  <div class="mechanisms">
+    <div class="mech">
+      <div class="mech-num">1</div>
+      <div>
+        <div class="mech-name">Legal Segregation</div>
+        <div class="mech-def">Laws and statutes that mandated racial separation. Plessy v. Ferguson (1896) provided the constitutional cover. Codified in Jim Crow statutes across most of the country.</div>
+        <div class="mech-examples"><strong>Look for:</strong> signage, designated facilities, ordinances, court rulings, posted rules</div>
+        <div class="mech-link"><a href="interactive_yarn.html">→ See which events targeted this mechanism</a></div>
+      </div>
+    </div>
+
+    <div class="mech">
+      <div class="mech-num">2</div>
+      <div>
+        <div class="mech-name">Economic Control</div>
+        <div class="mech-def">The ways the system extracted Black labor and excluded Black families from wealth-building. Sharecropping, debt peonage, employment discrimination, exclusion from federal programs (GI Bill, FHA, Social Security agricultural exemptions), redlining.</div>
+        <div class="mech-examples"><strong>Look for:</strong> labor arrangements, housing finance, business ownership, federal program access, capital flows</div>
+        <div class="mech-link"><a href="interactive_yarn.html">→ See which events targeted this mechanism</a></div>
+      </div>
+    </div>
+
+    <div class="mech">
+      <div class="mech-num">3</div>
+      <div>
+        <div class="mech-name">Violence or the Threat of Violence</div>
+        <div class="mech-def">Lynching, riots, organized terror (Klan, white citizens' councils), police violence, mob attacks on Black families integrating white spaces. EJI documents 4,400+ racial terror lynchings between 1877 and 1950.</div>
+        <div class="mech-examples"><strong>Look for:</strong> mobs, weapons, police presence (or absence), bodies, burned property, intimidation</div>
+        <div class="mech-link"><a href="interactive_yarn.html">→ See which events targeted this mechanism</a></div>
+      </div>
+    </div>
+
+    <div class="mech">
+      <div class="mech-num">4</div>
+      <div>
+        <div class="mech-name">Spatial / Architectural Separation</div>
+        <div class="mech-def">The physical and geographic enforcement of segregation. Walls, restrictive covenants in deeds, sundown towns, segregated facilities, residential redlining, separate neighborhoods.</div>
+        <div class="mech-examples"><strong>Look for:</strong> walls, maps, neighborhood boundaries, deeds, signs marking territory, architecture of separation</div>
+        <div class="mech-link"><a href="interactive_yarn.html">→ See which events targeted this mechanism</a></div>
+      </div>
+    </div>
+
+    <div class="mech">
+      <div class="mech-num">5</div>
+      <div>
+        <div class="mech-name">Daily Life Under Segregation</div>
+        <div class="mech-def">The texture of life within the system — the choreography of survival, the Negro Motorist Green Book, the small bodily moments that show what it meant to live inside Jim Crow rather than just to be governed by it.</div>
+        <div class="mech-examples"><strong>Look for:</strong> bodies in space, the small moment, navigation of the system, what is not said, the unposed</div>
+        <div class="mech-link"><a href="interactive_yarn.html">→ See which events targeted this mechanism</a></div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <span>The Pingry School</span>
+    <span class="mark">US History · 11</span>
+  </footer>
+</div>
+</body>
+</html>

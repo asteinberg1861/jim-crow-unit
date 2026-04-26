@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Digital Yarn Wall — Jim Crow in America</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1814;
+    --ink-soft: #5a564e;
+    --accent: #7a2f1f;
+    --paper: #ffffff;
+    --bg: #e8e3d9;
+    --legal: #b91c1c;
+    --economic: #1e4d8f;
+    --direct: #c89320;
+    --electoral: #2d6a3a;
+    --institution: #6b3f8f;
+    --armed: #c75a1f;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: 'Fraunces', Georgia, serif;
+    background: var(--bg);
+    color: var(--ink);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ─── Nav ─── */
+  .jc-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--ink);
+    height: 42px;
+    display: flex; align-items: center;
+    padding: 0 1.2rem; gap: 1.5rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7.8pt; letter-spacing: 0.14em; text-transform: uppercase;
+    flex-shrink: 0;
+  }
+  .jc-nav a { color: rgba(232,227,217,0.65); text-decoration: none; transition: color 0.1s; }
+  .jc-nav a:hover { color: #e8e3d9; }
+  .jc-nav-brand { color: #c4956a !important; font-weight: 600; }
+  .jc-nav-links { display: flex; gap: 1.4rem; margin-left: auto; }
+
+  /* ─── Header ─── */
+  .page-header {
+    background: var(--paper);
+    border-bottom: 1.4px solid var(--ink);
+    padding: 1.4rem 1.8rem 1.2rem;
+  }
+  .page-header h1 {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144;
+    font-weight: 900; font-size: 28pt;
+    line-height: 0.9; letter-spacing: -0.02em;
+  }
+  .page-header h1 .period { color: var(--accent); }
+  .page-header .subtitle {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8.5pt; letter-spacing: 0.26em;
+    text-transform: uppercase; color: var(--accent);
+    margin-top: 0.4rem; font-weight: 500;
+  }
+  .page-header .instructions {
+    font-family: 'Fraunces', serif;
+    font-style: italic; font-size: 10pt;
+    line-height: 1.45; color: var(--ink-soft);
+    margin-top: 0.6rem; max-width: 680px;
+  }
+
+  /* ─── Group selector tabs ─── */
+  .group-selector {
+    background: var(--paper);
+    border-bottom: 1px solid rgba(26,24,20,0.18);
+    padding: 0 1.4rem;
+    display: flex; gap: 0;
+    overflow-x: auto;
+  }
+  .group-tab {
+    padding: 0.7rem 1.2rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8pt; letter-spacing: 0.18em;
+    text-transform: uppercase; font-weight: 600;
+    cursor: pointer; border: none; background: none;
+    color: var(--ink-soft);
+    border-bottom: 3px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
+    white-space: nowrap;
+    position: relative;
+    bottom: -1px;
+  }
+  .group-tab:hover { color: var(--ink); }
+  .group-tab.active {
+    color: var(--tab-color);
+    border-bottom-color: var(--tab-color);
+  }
+
+  /* ─── Main layout ─── */
+  .main-grid {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  /* ─── Events panel (left) ─── */
+  .events-panel {
+    background: var(--paper);
+    border-right: 1.4px solid var(--ink);
+    overflow-y: auto;
+    display: flex; flex-direction: column;
+  }
+  .events-panel-header {
+    padding: 0.9rem 1.2rem 0.7rem;
+    border-bottom: 1px solid rgba(26,24,20,0.15);
+    position: sticky; top: 0; background: var(--paper); z-index: 2;
+  }
+  .events-panel-header .group-name {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 72;
+    font-weight: 600; font-size: 18pt;
+    line-height: 1;
+  }
+  .events-panel-header .group-name .period { color: var(--group-color, var(--accent)); }
+  .events-panel-header .group-hint {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7.6pt; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--ink-soft);
+    margin-top: 0.3rem;
+  }
+
+  .event-item {
+    padding: 0.85rem 1.2rem;
+    border-bottom: 1px solid rgba(26,24,20,0.1);
+    cursor: pointer;
+    transition: background 0.12s;
+    position: relative;
+  }
+  .event-item:hover { background: #f5f0e6; }
+  .event-item.selected {
+    background: #f5f0e6;
+    border-left: 4px solid var(--group-color, var(--accent));
+    padding-left: calc(1.2rem - 4px);
+  }
+  .event-item .event-year {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 72;
+    font-weight: 600; font-size: 11pt;
+    color: var(--group-color, var(--accent));
+    margin-bottom: 0.15rem;
+  }
+  .event-item .event-name {
+    font-family: 'Fraunces', serif;
+    font-weight: 600; font-size: 11pt;
+    line-height: 1.2; margin-bottom: 0.2rem;
+  }
+  .event-item .event-desc {
+    font-family: 'Fraunces', serif;
+    font-style: italic; font-size: 9pt;
+    line-height: 1.4; color: var(--ink-soft);
+  }
+  .event-item .connection-badges {
+    margin-top: 0.4rem;
+    display: flex; flex-wrap: wrap; gap: 0.3rem;
+  }
+  .badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7pt; letter-spacing: 0.1em;
+    text-transform: uppercase; font-weight: 600;
+    padding: 0.15rem 0.5rem;
+    border-radius: 2px;
+    color: white;
+    background: var(--group-color, var(--accent));
+  }
+
+  /* ─── Images panel (right) ─── */
+  .images-panel {
+    overflow-y: auto;
+    padding: 1.2rem;
+  }
+  .images-panel-header {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8.2pt; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--ink-soft);
+    margin-bottom: 0.9rem; font-weight: 500;
+  }
+  .images-panel-header span {
+    color: var(--accent); font-weight: 600;
+  }
+  .images-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 0.8rem;
+  }
+  .image-card {
+    border: 1.4px solid rgba(26,24,20,0.25);
+    background: var(--paper);
+    padding: 0.9rem 1rem 0.8rem;
+    cursor: pointer;
+    transition: border-color 0.12s, box-shadow 0.12s;
+    position: relative;
+  }
+  .image-card:hover {
+    border-color: var(--ink);
+    box-shadow: 0 4px 14px rgba(30,20,10,0.1);
+  }
+  .image-card.connected {
+    border-color: var(--group-color, var(--accent));
+    box-shadow: 0 0 0 2px var(--group-color, var(--accent));
+  }
+  .image-card .img-region-bar {
+    position: absolute; top: 0; left: 0; right: 0; height: 4px;
+  }
+  .image-card.south .img-region-bar { background: #7a2f1f; }
+  .image-card.north .img-region-bar { background: #1e4d8f; }
+
+  .image-card .img-num {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144;
+    font-weight: 900; font-style: italic;
+    font-size: 24pt; line-height: 0.85;
+    color: var(--ink-soft); opacity: 0.4;
+    position: absolute; top: 0.5rem; right: 0.7rem;
+  }
+  .image-card .img-region {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7pt; letter-spacing: 0.2em;
+    text-transform: uppercase; font-weight: 600;
+    margin-top: 0.5rem; margin-bottom: 0.35rem;
+  }
+  .image-card.south .img-region { color: #7a2f1f; }
+  .image-card.north .img-region { color: #1e4d8f; }
+  .image-card .img-title {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 72;
+    font-weight: 600; font-size: 10.5pt;
+    line-height: 1.2; margin-bottom: 0.35rem;
+  }
+  .image-card .img-meta {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7.6pt; letter-spacing: 0.04em;
+    color: var(--ink-soft); line-height: 1.5;
+  }
+  .image-card .img-connections {
+    margin-top: 0.5rem;
+    display: flex; flex-wrap: wrap; gap: 0.25rem;
+  }
+
+  /* ─── Explanation modal ─── */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(26,24,20,0.55);
+    z-index: 200;
+    display: flex; align-items: center; justify-content: center;
+    padding: 1rem;
+  }
+  .modal-overlay.hidden { display: none; }
+  .modal {
+    background: var(--paper);
+    width: 100%; max-width: 520px;
+    padding: 1.8rem;
+    position: relative;
+  }
+  .modal-close {
+    position: absolute; top: 1rem; right: 1rem;
+    background: none; border: none; cursor: pointer;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8pt; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--ink-soft);
+  }
+  .modal-close:hover { color: var(--ink); }
+  .modal-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7.8pt; letter-spacing: 0.22em;
+    text-transform: uppercase; font-weight: 600;
+    margin-bottom: 0.8rem;
+  }
+  .modal-connection {
+    display: grid; grid-template-columns: 1fr auto 1fr;
+    align-items: center; gap: 0.6rem; margin-bottom: 1.2rem;
+  }
+  .modal-side {
+    border: 1px solid rgba(26,24,20,0.2);
+    padding: 0.6rem 0.8rem;
+    font-family: 'Fraunces', serif;
+  }
+  .modal-side .ms-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7pt; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--ink-soft);
+    margin-bottom: 0.2rem;
+  }
+  .modal-side .ms-name {
+    font-weight: 600; font-size: 10.5pt; line-height: 1.2;
+  }
+  .modal-arrow {
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--ink-soft); font-size: 14pt;
+    text-align: center;
+  }
+  .modal h3 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8.2pt; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--ink-soft);
+    font-weight: 500; margin-bottom: 0.5rem;
+  }
+  .modal-select {
+    width: 100%; margin-bottom: 0.9rem;
+    border: 1px solid var(--ink); background: var(--paper);
+    font-family: 'Fraunces', Georgia, serif; font-size: 10.5pt;
+    color: var(--ink); padding: 0.4rem 0.6rem; outline: none;
+    -webkit-appearance: none;
+  }
+  .modal-select:focus { box-shadow: 0 0 0 2px rgba(122,47,31,0.3); }
+  .modal textarea {
+    width: 100%; border: 1px solid rgba(26,24,20,0.3);
+    background: #faf8f4; padding: 0.7rem 0.8rem;
+    font-family: 'Fraunces', Georgia, serif; font-size: 10.5pt;
+    line-height: 1.5; resize: vertical; min-height: 80px;
+    outline: none; color: var(--ink);
+  }
+  .modal textarea:focus { border-color: var(--ink); background: var(--paper); }
+  .modal-actions {
+    display: flex; gap: 0.7rem; margin-top: 1rem; align-items: center;
+  }
+  .btn-primary {
+    background: var(--ink); color: var(--bg);
+    border: none; padding: 0.6rem 1.4rem; cursor: pointer;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8pt; letter-spacing: 0.18em;
+    text-transform: uppercase; font-weight: 600;
+    transition: background 0.12s;
+  }
+  .btn-primary:hover { background: #3a3530; }
+  .btn-secondary {
+    background: none; color: var(--ink-soft);
+    border: 1px solid rgba(26,24,20,0.25);
+    padding: 0.6rem 1rem; cursor: pointer;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8pt; letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .btn-danger {
+    background: none; color: #b91c1c;
+    border: none; cursor: pointer;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7.8pt; letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-left: auto;
+  }
+
+  /* ─── Bottom bar ─── */
+  .bottom-bar {
+    background: var(--paper);
+    border-top: 1.4px solid var(--ink);
+    padding: 0.6rem 1.5rem;
+    display: flex; align-items: center; gap: 1rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7.8pt; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--ink-soft);
+    flex-shrink: 0;
+  }
+  .bottom-bar .save-indicator {
+    color: var(--accent); font-weight: 600;
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .bottom-bar .save-indicator.show { opacity: 1; }
+  .bottom-bar .count {
+    color: var(--ink); font-weight: 600;
+  }
+  .btn-clear {
+    margin-left: auto;
+    background: none; border: 1px solid rgba(26,24,20,0.2);
+    padding: 0.3rem 0.8rem; cursor: pointer;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7.4pt; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--ink-soft);
+  }
+  .btn-clear:hover { color: #b91c1c; border-color: #b91c1c; }
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav class="jc-nav">
+  <a href="index.html" class="jc-nav-brand">Jim Crow in America</a>
+  <div class="jc-nav-links">
+    <a href="01_context_cards.html">Context Cards</a>
+    <a href="02_mechanisms_reference.html">Mechanisms</a>
+    <a href="04_strategy_groups.html">Strategy Groups</a>
+  </div>
+</nav>
+
+<!-- Header -->
+<div class="page-header">
+  <h1>Digital Yarn Wall<span class="period">.</span></h1>
+  <div class="subtitle">Lesson 2 · Group Activity</div>
+  <div class="instructions">Select your group's strategy below. For each event, click it to select it — then click any image(s) on the right to create a connection. Write the mechanism being targeted and explain why.</div>
+</div>
+
+<!-- Group tabs -->
+<div class="group-selector" id="groupTabs"></div>
+
+<!-- Main grid -->
+<div class="main-grid">
+
+  <!-- Events panel -->
+  <div class="events-panel">
+    <div class="events-panel-header" id="eventsHeader">
+      <div class="group-name" id="groupNameDisplay">Select a group</div>
+      <div class="group-hint">Click an event to select it, then click images on the right</div>
+    </div>
+    <div id="eventsList"></div>
+  </div>
+
+  <!-- Images panel -->
+  <div class="images-panel">
+    <div class="images-panel-header">
+      Wall Images — <span id="selectionHint">select an event first, then click an image to connect</span>
+    </div>
+    <div class="images-grid" id="imagesGrid"></div>
+  </div>
+
+</div>
+
+<!-- Bottom bar -->
+<div class="bottom-bar">
+  <span>Connections: <span class="count" id="connectionCount">0</span></span>
+  <span class="save-indicator" id="saveIndicator">Saved</span>
+  <button class="btn-clear" onclick="confirmClear()">Clear All</button>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay hidden" id="modalOverlay">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕ Close</button>
+    <div class="modal-label" id="modalLabel">New Connection</div>
+    <div class="modal-connection">
+      <div class="modal-side">
+        <div class="ms-label">Event</div>
+        <div class="ms-name" id="modalEventName"></div>
+      </div>
+      <div class="modal-arrow">→</div>
+      <div class="modal-side">
+        <div class="ms-label">Image</div>
+        <div class="ms-name" id="modalImageName"></div>
+      </div>
+    </div>
+    <h3>Mechanism targeted</h3>
+    <select class="modal-select" id="modalMechanism">
+      <option value="">— Choose one —</option>
+      <option value="Legal Segregation">1 · Legal Segregation</option>
+      <option value="Economic Control">2 · Economic Control</option>
+      <option value="Violence or the Threat of Violence">3 · Violence or the Threat of Violence</option>
+      <option value="Spatial / Architectural Separation">4 · Spatial / Architectural Separation</option>
+      <option value="Daily Life Under Segregation">5 · Daily Life Under Segregation</option>
+    </select>
+    <h3>Why this connection (1–2 sentences)</h3>
+    <textarea id="modalExplanation" placeholder="Explain the connection between this event and this image..."></textarea>
+    <div class="modal-actions">
+      <button class="btn-primary" onclick="saveConnection()">Save Connection</button>
+      <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+      <button class="btn-danger" id="deleteBtn" onclick="deleteConnection()" style="display:none;">Delete</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── Data ───────────────────────────────────────────────────────────────────
+
+const GROUPS = [
+  {
+    id: 'legal', name: 'Legal', yarn: 'Red', color: '#b91c1c',
+    events: [
+      { year: '1909', name: 'NAACP founded', desc: 'Du Bois, Ida B. Wells and allies found the NAACP in response to the 1908 Springfield race riot. Its Legal Defense Fund spends four decades building the case law that brings down Plessy.' },
+      { year: '1948', name: 'Shelley v. Kraemer', desc: 'Supreme Court rules racially restrictive covenants cannot be enforced by courts. NAACP victory argued by Thurgood Marshall.' },
+      { year: '1954', name: 'Brown v. Board of Education', desc: 'Supreme Court overturns Plessy v. Ferguson — segregated schools "inherently unequal." Five consolidated cases including Briggs v. Elliott. Decision is unanimous.' },
+      { year: '1957', name: 'Little Rock Nine', desc: 'Nine Black students integrate Central High School. Governor Faubus calls out the National Guard to block them; Eisenhower sends the 101st Airborne.' },
+      { year: '1964', name: 'Civil Rights Act', desc: 'Bans discrimination in public accommodations, employment, and federally funded programs. The legal architecture of Jim Crow becomes federally illegal.' },
+    ]
+  },
+  {
+    id: 'economic', name: 'Economic', yarn: 'Blue', color: '#1e4d8f',
+    events: [
+      { year: '1940s', name: '"Don\'t Buy Where You Can\'t Work" campaigns', desc: 'Black communities boycott white-owned businesses refusing to hire Black workers. Built the organizational muscle that made later boycotts possible.' },
+      { year: '1955–56', name: 'Montgomery Bus Boycott', desc: 'After Rosa Parks\'s arrest, the WPC and MIA organize a 381-day boycott. Black ridership was 75% of the system\'s revenue.' },
+      { year: '1956', name: 'Tallahassee Bus Boycott', desc: 'Sparked by the arrest of two FAMU students who refused to give up their seats. Lasted seven months.' },
+      { year: '1962', name: 'Albany Movement boycotts', desc: 'Black residents boycott segregated buses and white-owned businesses in Albany, GA. The city closed parks rather than integrate them.' },
+      { year: '1968', name: 'Memphis Sanitation Workers Strike', desc: 'After two workers are crushed to death in a truck, 1,300 workers strike. "I AM A MAN" placards. King was assassinated while supporting the strike.' },
+    ]
+  },
+  {
+    id: 'direct', name: 'Direct Action', yarn: 'Yellow', color: '#c89320',
+    events: [
+      { year: '1960', name: 'Greensboro sit-ins', desc: 'Four A&T students sit at the Woolworth\'s lunch counter in Greensboro. Within two months, sit-ins spread to 55 cities in 13 states.' },
+      { year: '1961', name: 'Freedom Rides', desc: 'CORE activists ride interstate buses to test the Supreme Court\'s ruling against segregation in interstate travel. Riders are beaten; their bus is firebombed in Anniston.' },
+      { year: '1963', name: 'Birmingham Campaign', desc: 'SCLC targets "the most segregated city in America." Bull Connor turns fire hoses and dogs on schoolchildren. Images go national.' },
+      { year: '1963', name: 'March on Washington', desc: '250,000 marchers gather at the Lincoln Memorial. King delivers "I Have a Dream." Organized largely by Bayard Rustin.' },
+      { year: '1965', name: 'Selma to Montgomery marches', desc: '"Bloody Sunday" on the Edmund Pettus Bridge. Third march completed under federal protection, helping secure the Voting Rights Act.' },
+    ]
+  },
+  {
+    id: 'electoral', name: 'Electoral', yarn: 'Green', color: '#2d6a3a',
+    events: [
+      { year: '1962', name: 'COFO formed', desc: 'SNCC, CORE, NAACP, and SCLC form a coalition to coordinate voter registration in Mississippi, where Black voter registration was below 7%.' },
+      { year: '1964', name: 'Mississippi Freedom Summer', desc: '1,000 volunteers register Black voters and run Freedom Schools. Three workers — Chaney, Goodman, Schwerner — are murdered by Klansmen.' },
+      { year: '1964', name: 'Fannie Lou Hamer at the DNC', desc: 'The MFDP challenges the all-white MS delegation at the Democratic Convention. Hamer\'s testimony is so powerful LBJ calls a press conference to keep her off air.' },
+      { year: '1965', name: 'Lowndes County Freedom Organization', desc: 'In a county 80% Black with zero registered Black voters, Stokely Carmichael helps organize an independent Black party. Its symbol — a black panther — is later adopted by the BPP.' },
+      { year: '1965', name: 'Voting Rights Act', desc: 'Bans literacy tests, authorizes federal oversight of voter registration. Black voter registration in Mississippi rises from 7% (1964) to 60% (1968).' },
+    ]
+  },
+  {
+    id: 'institution', name: 'Institution-Building', yarn: 'Purple', color: '#6b3f8f',
+    events: [
+      { year: '1932', name: 'Highlander Folk School founded', desc: 'Myles Horton founds Highlander as an integrated training center for labor organizers and civil rights activists. Rosa Parks attended four months before her arrest.' },
+      { year: '1957', name: 'Citizenship Schools (Septima Clark)', desc: 'Clark develops a model for teaching Black adults to pass voter literacy tests. By 1969, an estimated 700,000 Black voters registered through Citizenship School graduates.' },
+      { year: '1957', name: 'SCLC founded', desc: 'After Montgomery, ministers form the Southern Christian Leadership Conference. King is its first president.' },
+      { year: '1960', name: 'SNCC founded (Ella Baker)', desc: 'After the Greensboro sit-ins, Baker convenes students at Shaw University. SNCC insists on bottom-up democratic organizing rather than charismatic leadership.' },
+      { year: '1964', name: 'Freedom Schools', desc: 'COFO operates 41 Freedom Schools across Mississippi serving 2,500 students. Curriculum included Black history, current events, and political organizing.' },
+    ]
+  },
+  {
+    id: 'armed', name: 'Armed Self-Defense', yarn: 'Orange', color: '#c75a1f',
+    events: [
+      { year: '1957', name: 'Robert F. Williams & the Monroe NAACP', desc: 'Williams organizes Black veterans into an armed defense unit after Klan attacks. When the Klan motorcades through, the unit returns fire. Klan night-riding in Monroe ends.' },
+      { year: '1962', name: 'Negroes with Guns published', desc: 'Williams argues armed self-defense is compatible with nonviolent civil rights organizing. The book influences Huey Newton and Bobby Seale.' },
+      { year: '1964', name: 'Deacons for Defense and Justice founded', desc: 'Black veterans in Jonesboro, LA organize armed protection for CORE workers and civil rights marches. Chapters spread across Louisiana and Mississippi.' },
+      { year: '1965', name: 'Bogalusa, Louisiana', desc: 'Deacons protect CORE workers during a campaign in a Klan-controlled town. After armed standoffs, federal marshals are deployed.' },
+      { year: '1965', name: 'Mississippi Freedom Summer protection', desc: 'Local Black communities — grandmothers, farmers — provide armed nighttime guard at SNCC/CORE workers\' homes. The nonviolent movement\'s survival depended on this.' },
+    ]
+  },
+];
+
+const IMAGES = [
+  { num: 1, region: 'south', regionLabel: 'South', title: 'Bus station, Durham, NC', meta: 'Jack Delano · May 1940 · FSA/OWI' },
+  { num: 2, region: 'south', regionLabel: 'South', title: 'Colored entrance, Crescent Theatre, Belzoni, MS', meta: 'Marion Post Wolcott · Oct. 1939 · FSA/OWI' },
+  { num: 3, region: 'south', regionLabel: 'South', title: 'Colored water cooler, Oklahoma City', meta: 'Russell Lee · July 1939 · FSA/OWI' },
+  { num: 4, region: 'south', regionLabel: 'South', title: 'Sharecropper family, Deep South', meta: 'Dorothea Lange · 1936–37 · FSA/OWI' },
+  { num: 5, region: 'south', regionLabel: 'South', title: 'Briggs v. Elliott plaintiffs, Summerton, SC', meta: 'Cecil Williams · June 17, 1951' },
+  { num: 6, region: 'north', regionLabel: 'North · Newark, NJ', title: 'HOLC redlining map, Essex County', meta: 'Home Owners\' Loan Corp. · 1939' },
+  { num: 7, region: 'north', regionLabel: 'North · Cicero, IL', title: 'Cicero riot — the Clark family', meta: 'Chicago Tribune archives · July 1951' },
+  { num: 8, region: 'north', regionLabel: 'North · Detroit, MI', title: 'The Birwood Wall (Eight Mile Wall)', meta: 'John Vachon · Aug. 1941 · FSA/OWI' },
+  { num: 9, region: 'north', regionLabel: 'North · Levittown, PA', title: 'The Myers family with neighbors', meta: 'Charlotte Brooks · 1957 · LOOK Magazine' },
+  { num: 10, region: 'north', regionLabel: 'North · Washington, DC', title: 'American Gothic — Ella Watson', meta: 'Gordon Parks · Aug. 1942 · FSA/OWI' },
+];
+
+// ─── State ───────────────────────────────────────────────────────────────────
+
+let selectedGroup = null;
+let selectedEventIdx = null;
+let connections = {}; // key: "groupId-eventIdx-imageNum", value: { mechanism, explanation }
+let modalKey = null;
+let isEditMode = false;
+
+// Load from localStorage
+try {
+  const saved = localStorage.getItem('jc-yarn-connections');
+  if (saved) connections = JSON.parse(saved);
+} catch(e) {}
+
+// ─── Render ──────────────────────────────────────────────────────────────────
+
+function init() {
+  renderTabs();
+  renderImages();
+  updateCount();
+}
+
+function renderTabs() {
+  const container = document.getElementById('groupTabs');
+  container.innerHTML = GROUPS.map(g => `
+    <button
+      class="group-tab ${selectedGroup === g.id ? 'active' : ''}"
+      style="--tab-color: ${g.color}"
+      onclick="selectGroup('${g.id}')"
+    >${g.name}</button>
+  `).join('');
+}
+
+function selectGroup(groupId) {
+  selectedGroup = groupId;
+  selectedEventIdx = null;
+  renderTabs();
+  renderEvents();
+  renderImages();
+}
+
+function renderEvents() {
+  const group = GROUPS.find(g => g.id === selectedGroup);
+  if (!group) return;
+
+  document.getElementById('eventsHeader').style.setProperty('--group-color', group.color);
+  document.getElementById('groupNameDisplay').innerHTML = `${group.name}<span class="period">.</span>`;
+
+  const list = document.getElementById('eventsList');
+  list.innerHTML = group.events.map((ev, idx) => {
+    const groupConnections = getEventConnections(selectedGroup, idx);
+    const badges = groupConnections.map(c =>
+      `<span class="badge">Image ${c.imageNum}</span>`
+    ).join('');
+    return `
+      <div
+        class="event-item ${selectedEventIdx === idx ? 'selected' : ''}"
+        style="--group-color: ${group.color}"
+        onclick="selectEvent(${idx})"
+      >
+        <div class="event-year">${ev.year}</div>
+        <div class="event-name">${ev.name}</div>
+        <div class="event-desc">${ev.desc}</div>
+        ${badges ? `<div class="connection-badges">${badges}</div>` : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+function selectEvent(idx) {
+  selectedEventIdx = idx;
+  renderEvents();
+  const group = GROUPS.find(g => g.id === selectedGroup);
+  const ev = group.events[idx];
+  document.getElementById('selectionHint').textContent =
+    `"${ev.name}" selected — click an image to connect`;
+  renderImages();
+}
+
+function renderImages() {
+  const group = selectedGroup ? GROUPS.find(g => g.id === selectedGroup) : null;
+  const grid = document.getElementById('imagesGrid');
+
+  grid.innerHTML = IMAGES.map(img => {
+    const imgConnections = getImageConnections(img.num);
+    const isConnectedToSelected = selectedGroup && selectedEventIdx !== null
+      ? !!connections[`${selectedGroup}-${selectedEventIdx}-${img.num}`]
+      : false;
+
+    const allBadges = imgConnections.map(c => {
+      const g = GROUPS.find(x => x.id === c.groupId);
+      return `<span class="badge" style="background:${g.color}">Group ${c.groupId.substring(0,1).toUpperCase()}</span>`;
+    }).join('');
+
+    return `
+      <div
+        class="image-card ${img.region} ${isConnectedToSelected ? 'connected' : ''}"
+        style="${group ? `--group-color: ${group.color}` : ''}"
+        onclick="handleImageClick(${img.num})"
+      >
+        <div class="img-region-bar"></div>
+        <div class="img-num">${img.num}</div>
+        <div class="img-region">${img.regionLabel}</div>
+        <div class="img-title">${img.title}</div>
+        <div class="img-meta">${img.meta}</div>
+        ${allBadges ? `<div class="img-connections">${allBadges}</div>` : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+// ─── Interactions ─────────────────────────────────────────────────────────────
+
+function handleImageClick(imageNum) {
+  if (!selectedGroup || selectedEventIdx === null) {
+    document.getElementById('selectionHint').textContent =
+      'Select an event on the left first';
+    return;
+  }
+  const key = `${selectedGroup}-${selectedEventIdx}-${imageNum}`;
+  const existing = connections[key];
+  openModal(key, imageNum, !!existing);
+}
+
+function openModal(key, imageNum, isEdit) {
+  modalKey = key;
+  isEditMode = isEdit;
+
+  const [groupId, eventIdxStr] = key.split('-');
+  const eventIdx = parseInt(eventIdxStr);
+  const group = GROUPS.find(g => g.id === groupId);
+  const ev = group.events[eventIdx];
+  const img = IMAGES.find(i => i.num === imageNum);
+
+  document.getElementById('modalLabel').textContent = isEdit ? 'Edit Connection' : 'New Connection';
+  document.getElementById('modalLabel').style.color = group.color;
+  document.getElementById('modalEventName').textContent = `${ev.year} · ${ev.name}`;
+  document.getElementById('modalImageName').textContent = `#${imageNum} — ${img.title}`;
+
+  const existing = connections[key];
+  document.getElementById('modalMechanism').value = existing ? existing.mechanism : '';
+  document.getElementById('modalExplanation').value = existing ? existing.explanation : '';
+  document.getElementById('deleteBtn').style.display = isEdit ? 'block' : 'none';
+
+  document.getElementById('modalOverlay').classList.remove('hidden');
+  document.getElementById('modalExplanation').focus();
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.add('hidden');
+  modalKey = null;
+  isEditMode = false;
+}
+
+function saveConnection() {
+  const mechanism = document.getElementById('modalMechanism').value;
+  const explanation = document.getElementById('modalExplanation').value.trim();
+  if (!mechanism) {
+    document.getElementById('modalMechanism').focus();
+    document.getElementById('modalMechanism').style.borderColor = '#b91c1c';
+    setTimeout(() => document.getElementById('modalMechanism').style.borderColor = '', 1500);
+    return;
+  }
+  connections[modalKey] = { mechanism, explanation };
+  persist();
+  closeModal();
+  renderEvents();
+  renderImages();
+  updateCount();
+}
+
+function deleteConnection() {
+  if (!modalKey) return;
+  delete connections[modalKey];
+  persist();
+  closeModal();
+  renderEvents();
+  renderImages();
+  updateCount();
+}
+
+function getEventConnections(groupId, eventIdx) {
+  return Object.entries(connections)
+    .filter(([k]) => k.startsWith(`${groupId}-${eventIdx}-`))
+    .map(([k, v]) => ({ imageNum: parseInt(k.split('-')[2]), ...v }));
+}
+
+function getImageConnections(imageNum) {
+  return Object.entries(connections)
+    .filter(([k]) => k.endsWith(`-${imageNum}`))
+    .map(([k, v]) => ({ groupId: k.split('-')[0], eventIdx: parseInt(k.split('-')[1]), ...v }));
+}
+
+function updateCount() {
+  document.getElementById('connectionCount').textContent = Object.keys(connections).length;
+}
+
+function persist() {
+  try {
+    localStorage.setItem('jc-yarn-connections', JSON.stringify(connections));
+    const ind = document.getElementById('saveIndicator');
+    ind.classList.add('show');
+    setTimeout(() => ind.classList.remove('show'), 1800);
+  } catch(e) {}
+}
+
+function confirmClear() {
+  if (Object.keys(connections).length === 0) return;
+  if (confirm('Clear all connections? This cannot be undone.')) {
+    connections = {};
+    persist();
+    renderEvents();
+    renderImages();
+    updateCount();
+  }
+}
+
+// Close modal on overlay click
+document.getElementById('modalOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// Keyboard: Escape closes modal
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeModal();
+});
+
+init();
+</script>
+</body>
+</html>
